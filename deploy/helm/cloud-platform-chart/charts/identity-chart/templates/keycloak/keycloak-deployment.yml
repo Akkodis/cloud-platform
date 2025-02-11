@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: {{ .Values.keycloak.name }}-deployment
+        namespace: {{ .Values.namespace }}
+spec:
+        replicas: {{ .Values.keycloak.replicas }}
+        selector:
+                matchLabels:
+                        app: {{ .Values.keycloak.name }}
+        template:
+                metadata:
+                        labels:
+                                app: {{ .Values.keycloak.name }}
+                spec:
+                  #imagePullSecrets:
+                  #              - name: regcred
+                        containers:
+                                - name: {{ .Values.keycloak.name }}
+                                  image: {{ .Values.keycloak.image.name }}:{{ .Values.keycloak.image.tag }}
+                                  imagePullPolicy: "IfNotPresent"
+                                  ports:
+                                          - containerPort: 8080
+                                  args: ["start"]
+                                  envFrom:
+                                          - configMapRef:
+                                                  name: {{ .Values.keycloak.name }}-configmap
+                                  env:
+                                          - name: KEYCLOAK_ADMIN
+                                            valueFrom:
+                                                    secretKeyRef:
+                                                            name: {{ .Values.keycloak.name }}-secret
+                                                            key: username
+                                          - name: KEYCLOAK_ADMIN_PASSWORD
+                                            valueFrom:
+                                                    secretKeyRef:
+                                                            name: {{ .Values.keycloak.name }}-secret
+                                                            key: password
+                                          - name: KC_DB_USERNAME
+                                            valueFrom:
+                                                    secretKeyRef:
+                                                            name: {{ .Values.keycloak.name }}-secret
+                                                            key: db-username
+                                          - name: KC_DB_PASSWORD
+                                            valueFrom:
+                                                    secretKeyRef:
+                                                            name: {{ .Values.keycloak.name }}-secret
+                                                            key: db-password                  

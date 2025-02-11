@@ -1,0 +1,48 @@
+namespace: cloud-platform
+app: identity
+
+dbName: keycloak-db
+
+#imagePullSecrets:
+#  - name: regcred
+#nameOverride: ""
+#fullnameOverride: "identity-api"
+
+keycloak:
+        name: keycloak
+        replica: 1
+        image:
+                name: quay.io/keycloak/keycloak
+                tag: latest
+        port: 8080
+
+postgres:
+        name: postgres
+        replica: 1
+        image:
+                name: postgres
+                tag: 14
+        volume:
+                size: 5Gi
+        pod: postgres-0
+
+user-informations:
+        enable: true
+  
+secrets:
+        keycloak:
+                username: 5gmeta-identity-admin
+                password: keycloak-pw
+        db:
+                username: keycloak-db-admin
+                password: keycloak-pw
+
+ingress:
+        enabled: false
+        className: ""
+        annotations:
+                kubernetes.io/ingress.class: nginx
+        hosts:
+                - paths:
+                        - path: /identity/
+                          pathType: Prefix

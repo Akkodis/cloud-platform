@@ -1,0 +1,92 @@
+# Default values for dataflowapi-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: damadouk/dataflow-api
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "plain"
+
+#imagePullSecrets: []
+#imagePullSecrets:
+#  - name: regcred
+#nameOverride: ""
+#fullnameOverride: "dataflow-api"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 5000
+  nodePort: ""
+  clusterIP: ""
+  loadBalancerIP: ""
+
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+env:
+  - name: DB_USER
+    value: "5gmeta-platform"
+  - name: DB_PASSWORD
+    value: "5gmeta-platform"
+  - name: DB_IP
+    value: "mysql-cluster.cloud-platform.svc.cluster.local"
+  - name: DB_PORT
+    value: "3306"
+  - name: DB_NAME
+    value: "dataflowdb"
+  - name: KAFKA_IP
+    value: "cloud-platform-cp-ksql-server.cloud-platform.svc.cluster.local"
+  - name: KAFKA_PORT
+    value: "8088"
+  - name: activemq_user_name
+    value: "5gmeta-platform"
+  - name: activemq_user_password
+    value: "5gmeta-platform"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,21 @@
+namespace: cloud-platform
+app: license-api
+
+dbName: license-database
+
+licence:
+  name: license
+  replicas: 1
+  image:
+    name: damadouk/license-api
+    tag: latest      
+
+mongodb:
+   name: mongodb
+   replica: 1
+   image:
+     name: mongo
+     tag: latest
+   volume:
+      size: 5Gi
+   pod: mongodb-0

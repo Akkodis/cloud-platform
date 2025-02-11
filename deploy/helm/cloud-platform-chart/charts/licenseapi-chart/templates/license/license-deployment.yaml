@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.licence.name }}
+spec:
+  replicas: {{ .Values.licence.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}
+    spec:
+      imagePullSecrets:
+              - name: regcred
+      containers:
+      - name: {{ .Values.licence.name }}
+        image: {{ .Values.licence.image.name }}:{{ .Values.licence.image.tag }}
+        ports:
+          - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.licence.name }}-configmap
+        imagePullPolicy: "Always"

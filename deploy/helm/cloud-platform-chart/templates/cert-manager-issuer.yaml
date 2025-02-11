@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Values.global.tls.issuer }}
+  labels:
+    app.kubernetes.io/managed-by: Helm
+spec:
+ {{- if eq .Values.global.tls.issuer "ca-issuer" }}
+ ca:
+   secretName: ca-issuer-secret
+ {{- else if eq .Value.global.tls.issuer "letsencrypt-staging" }}
+ acme:
+   server: https://acme-staging-v02.api.letsencrypt.org/directory
+   email: 5gmeta@akkodis.eu
+   privateKeySecretRef:
+     name: {{ .Values.global.tls.issuer }}
+   solvers:
+     - http01:
+         ingress:
+           class: nginx
+ {{ end }}

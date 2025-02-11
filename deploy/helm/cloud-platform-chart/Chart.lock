@@ -1,0 +1,15 @@
+dependencies:
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v1.16.2
+- name: kube-prometheus-stack
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 67.4.0
+- name: mysql
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.2.0
+- name: apisix
+  repository: https://charts.bitnami.com/bitnami
+  version: 3.7.0
+digest: sha256:042a03ce6454f3e169ae956d8ec4d44ce86074741254b06d803197f0896bce42
+generated: "2024-12-23T04:02:58.897823035+01:00"

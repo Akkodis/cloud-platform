@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+        name: {{ .Values.keycloak.name }}-configmap
+        labels:
+                app: {{.Values.app }}
+        namespace: {{ .Values.namespace }}
+data:
+        KC_DB: postgres
+        KC_DB_URL: jdbc:postgresql://{{ .Values.postgres.name }}-service.{{ .Values.namespace }}.svc.cluster.local/{{ .Values.dbName }}
+        KC_HTTP_RELATIVE_PATH: "identity"
+        KC_HTTP_ENABLED: "true"
+        KC_PROXY: edge
+        KC_HOSTNAME: https://{{ .Values.global.oauth2.issuer }}
+        KC_HOSTNAME_PATH: identity
+        #KC_FEATURES: declarative-user-profile

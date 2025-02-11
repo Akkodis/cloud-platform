@@ -1,0 +1,113 @@
+global:
+   tls:
+      issuer: &globalissuer "ca-issuer"
+   cloudplatform:
+      hostname: &globalhostname "5gmeta-platform.eu"
+      scheme: &globalscheme "https"
+      deployment: dev
+      username: &globalusername "5gmeta-platform"
+      password: &globalpassword "5gmeta-platform"
+      dbrootpassword: &globaldbrootpassword "5gmeta-platform"
+
+   oauth2:
+     issuer: 5gmeta-platform.eu/identity
+     realm: 5gmeta
+     apisix:
+       client: apisix
+       secret: T7uuYjxAaxsUMoVClujNCksyAEh0rgW7
+
+cert-manager:
+  namespace: cert-manager
+  fullnameOverride: cert-manager
+  crds:
+    enabled: false
+  startupapicheck:
+    timeout: 30m
+
+apisix:
+  controlPlane:
+    enabled: false
+  ingressController:
+    enabled: false
+  etcd:
+    enabled: false
+  dashboard:
+    enabled: false
+  dataPlane:
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      hostname: *globalhostname
+      ingressClassName: "nginx"
+      pathType: Prefix
+      tls: true
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
+        nginx.ingress.kubernetes.io/proxy-buffering: "on"
+        nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+        nginx.ingress.kubernetes.io/proxy-busy-buffers-size: 256k
+        cert-manager.io/issuer: *globalissuer
+
+    extraConfig:
+      deployment:
+        role_data_plane:
+          config_provider: yaml
+    extraVolumes:
+      - name: routes
+        configMap:
+          name: apisix-routes
+    extraVolumeMounts:
+      - name: routes
+        mountPath: /usr/local/apisix/conf/apisix.yaml
+        subPath: apisix.yaml
+
+kube-prometheus-stack:
+  fullnameOverride: kube-prometheus
+  grafana:
+    fullnameOverride: grafana
+    grafana.ini:
+      server:
+        domain: *globalhostname
+        root_url: https://5gmeta-plaform.eu/grafana/
+        serve_from_sub_path: true
+
+mysql:
+  fullnameOverride: mysql-cluster
+  architecture: standalone
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: cloud-platform
+      namespace: cloud-platform
+  primary:
+    service:
+      nodePorts:
+        mysql: 30057
+      type: NodePort
+
+  auth:
+    createDatabase: false
+    password: *globalusername
+    rootPassword: *globaldbrootpassword
+    username: *globalpassword
+
+  initdbScriptsConfigMap: "init-mysql-databases"
+
+# 5GMETA Cloud Platform modules
+cloudinstanceapi-chart:
+  fullnameOverride: cloudinstance-api
+
+dashboard-chart:
+  fullnameOverride: dashboard
+
+dataflowapi-chart:
+  fullnameOverride: dataflow-api
+
+discoveryapi-chart:
+  fullnameOverride: discovery-api

@@ -1,0 +1,39 @@
+###
+# Example pod with containers for using KSQL on Kubernetes. Not for production.
+#
+# Run the pod:
+#   $ kubectl apply -f examples/ksql-demo.yaml
+#
+# Run KSQL CLI:
+#   $ kubectl exec -it ksql-demo --container ksql -- /bin/bash ksql
+#   ksql> list topics ;
+#   ksql> print 'pageviews';
+#
+#   Then create any query: https://docs.confluent.io/current/ksql/docs/tutorials/basics-docker.html#create-a-stream-and-table
+#
+###
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ksql-demo
+  namespace: cloud-platform
+spec:
+  containers:
+  - name: ksql-datagen-pageviews
+    image: confluentinc/ksqldb-examples:6.1.0
+    command:
+      - sh
+      - -c
+      - "exec ksql-datagen quickstart=pageviews format=delimited topic=pageviews bootstrap-server=cloud-platform-cp-kafka:9092"
+  - name: ksql-datagen-users
+    image: confluentinc/ksqldb-examples:6.1.0
+    command:
+      - sh
+      - -c
+      - "ksql-datagen quickstart=users format=json topic=users iterations=1000 bootstrap-server=cloud-platform-cp-kafka:9092"
+  - name: ksql
+    image: confluentinc/cp-ksqldb-cli:6.1.0
+    command:
+      - sh
+      - -c
+      - "exec tail -f /dev/null"
