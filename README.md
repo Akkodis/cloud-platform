@@ -108,7 +108,7 @@ To install the 5GMETA Cloud Platform follow the instructions below:
 - Clone the Cloud Platform
 
 ```bash
-git clone ssh://git@gitlab.akka.eu:22522/5gmeta-new/cloud-platform.git
+git clone git@github.com:Akkodis/Cloud-Platform.git
 ```
 
 - Edit the Cloud Platform chart's values to set a hostname, usernames and passwords. The values' file can be found in ./cloud-platform/deploy/helm/cloud-platform-chart.
