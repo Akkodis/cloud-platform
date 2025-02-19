@@ -117,6 +117,12 @@ git clone git@github.com:Akkodis/Cloud-Platform.git
 
 ```bash
 cd cloud-platform
+
+# Install Apache Superet
+helm repo add superset https://apache.github.io/superset
+helm upgrade --install --values deploy/helm/superset/values.yaml superset superset/superset -n superset --create-namespace
+
+# Install other components
 kubectl create namespace cert-manager
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
 helm dependency build deploy/helm/cloud-platform-chart
