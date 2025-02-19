@@ -6,3 +6,8 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+
+
+# Ignore compressed Helm Charts
+
+*.tgz

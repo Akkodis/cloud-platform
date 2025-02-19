@@ -99,12 +99,38 @@ mysql:
 
   initdbScriptsConfigMap: "init-mysql-databases"
 
+keycloak:
+  auth:
+    adminUser: 5gmeta-identity-admin
+    adminPassword: keycloak-pw
+  production: true
+  proxy: edge
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  extraEnvVars:
+    - name: KC_DB
+      value: postgres
+    - name: KC_HTTP_RELATIVE_PATH
+      value: 'identity'
+    - name: KC_HTTP_ENABLED
+      value: "true"
+    - name: KC_HOSTNAME
+      value: https://5gmeta-platform.eu/identity
+
+
+
+  postgresql:
+    auth:
+      username: 5gmeta-db-admin
+      password: keycloak-pw
+      database: postgres
+
+
 # 5GMETA Cloud Platform modules
 cloudinstanceapi-chart:
   fullnameOverride: cloudinstance-api
-
-dashboard-chart:
-  fullnameOverride: dashboard
 
 dataflowapi-chart:
   fullnameOverride: dataflow-api

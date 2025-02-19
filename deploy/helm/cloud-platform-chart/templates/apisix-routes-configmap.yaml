@@ -11,7 +11,7 @@ data:
         uri: /identity/*
         upstream:
             nodes:
-                    "keycloak-service.{{ .Release.Namespace }}.svc.cluster.local:8080": 1
+                    "cloud-platform-keycloak.{{ .Release.Namespace }}.svc.cluster.local:80": 1
             type: roundrobin
         priority: 200
 
@@ -19,7 +19,7 @@ data:
         uri: /*
         upstream:
             nodes:
-                    "dashboard.{{ .Release.Namespace }}.svc.cluster.local:80": 1
+                    "superset.superset.svc.cluster.local:8088": 1
             type: roundrobin
         priority: 201
         plugins:
@@ -35,7 +35,7 @@ data:
                 bearer_only: false
                 realm: {{ .Values.global.oauth2.realm }}
                 introspection_endpoint_auth_method: client_secret_post
-                redirect_uri: "dashboard/redirect"
+                redirect_uri: "/redirect"
       -
         uri: /license-api/*
         upstream:

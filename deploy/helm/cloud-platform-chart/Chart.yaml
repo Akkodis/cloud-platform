@@ -43,3 +43,8 @@ dependencies:
 - name: apisix
   repository: https://charts.bitnami.com/bitnami
   version: 3.7.0
+
+- name: keycloak
+  repository: https://charts.bitnami.com/bitnami
+  version: 24.4.10
+

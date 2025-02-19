@@ -11,5 +11,8 @@ dependencies:
 - name: apisix
   repository: https://charts.bitnami.com/bitnami
   version: 3.7.0
-digest: sha256:042a03ce6454f3e169ae956d8ec4d44ce86074741254b06d803197f0896bce42
-generated: "2024-12-23T04:02:58.897823035+01:00"
+- name: keycloak
+  repository: https://charts.bitnami.com/bitnami
+  version: 24.4.10
+digest: sha256:b8b1ac6b2c972a72e3e8b63785c9f131fb73431c5a7fe3f976f55393f5b33218
+generated: "2025-02-19T13:49:26.334443851+01:00"
