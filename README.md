@@ -102,13 +102,14 @@ The deplopyment of the Cloud Platform is done using one Helm chart which will in
 3. Install MySQL Database and create the databases
 4. Install Confluentic Apache Kafka
 5. Install the 5GMETA Cloud Platform modules.
+6. Install Apache Superset
 
 To install the 5GMETA Cloud Platform follow the instructions below:
 
 - Clone the Cloud Platform
 
 ```bash
-git clone git@github.com:Akkodis/Cloud-Platform.git
+git clone git@github.com:Akkodis/cloud-platform.git
 ```
 
 - Edit the Cloud Platform chart's values to set a hostname, usernames and passwords. The values' file can be found in ./cloud-platform/deploy/helm/cloud-platform-chart.
@@ -127,6 +128,15 @@ kubectl create namespace cert-manager
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
 helm dependency build deploy/helm/cloud-platform-chart
 helm install cloud-platform deploy/helm/cloud-platform-chart -n cloud-platform --create-namespace
+```
+#### Install Apache Superset
+
+Apache Superset has been used as replacement of the Dashboard developped during the 5GMETA project. To install superset, type the following commands
+
+```bash
+kubectl create namespace superset
+helm repo add superset https://apache.github.io/superset
+helm upgrade --install --values values.yaml superset superset/superset -n superset
 ```
 
 #### Cloud Platform Post-install configuration
@@ -154,8 +164,3 @@ After a successful installation:
 
 This document presented the 5GMETA Cloud Platfrom and its deployment approach.
 
-TODO: Update the conclusion.
-
-
-# References
-TODO: Add references
