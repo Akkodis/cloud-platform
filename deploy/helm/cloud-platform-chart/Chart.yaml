@@ -45,6 +45,10 @@ dependencies:
   version: 3.7.0
 
 - name: keycloak
+  repository: https://charts.bitnami.com/bitnami  
+  version: 24.4.10 
+
+- name: mongodb
   repository: https://charts.bitnami.com/bitnami
-  version: 24.4.10
+  version: 16.5.5
 

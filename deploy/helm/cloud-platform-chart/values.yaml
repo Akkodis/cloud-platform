@@ -10,7 +10,7 @@ global:
       dbrootpassword: &globaldbrootpassword "5gmeta-platform"
 
    oauth2:
-     issuer: 5gmeta-platform.eu/identity
+     issuer: &oauthissuer "5gmeta-platform.eu/identity"
      realm: 5gmeta
      apisix:
        client: apisix
@@ -99,41 +99,52 @@ mysql:
 
   initdbScriptsConfigMap: "init-mysql-databases"
 
+
+# Keycloak as Identity provider
 keycloak:
   auth:
     adminUser: 5gmeta-identity-admin
-    adminPassword: keycloak-pw
-  production: true
-  proxy: edge
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
+    adminPassword: changeme
+
   extraEnvVars:
-    - name: KC_DB
-      value: postgres
     - name: KC_HTTP_RELATIVE_PATH
-      value: 'identity'
+      value: "identity"
     - name: KC_HTTP_ENABLED
       value: "true"
+    - name: KC_PROXY
+      value: "edge"
     - name: KC_HOSTNAME
-      value: https://5gmeta-platform.eu/identity
+      value: "https://5gmeta-platform.eu/identity"
+    - name: KC_HOSTNAME_PATH
+      value: "identity"
+  volumes:
+    - /tmp/security/keyclaok:/opt/bitnami/keycloak/data/import
+  livenessProbe:
+    enabled: false
 
-
+  readinessProbe:
+    enabled: false
 
   postgresql:
+    enabled: true
     auth:
-      username: 5gmeta-db-admin
-      password: keycloak-pw
-      database: postgres
+      username: keycloak-db-admin
+      password: keycloak-db-password
 
+
+# Mongodb 
+mongodb:
+  fullnameOverride: mongodb
+  architecture: "standalone"
+  auth:
+    usernames:
+      - "5gmeta-platform"
+    passwords:
+      - "5gmeta-platform"
+    rootPassword: "5gmeta-platform"
+    databases:
+      - "license-database"
 
 # 5GMETA Cloud Platform modules
-cloudinstanceapi-chart:
-  fullnameOverride: cloudinstance-api
-
-dataflowapi-chart:
-  fullnameOverride: dataflow-api
-
-discoveryapi-chart:
-  fullnameOverride: discovery-api
+apiserver-chart:
+  fullnameOverride: apiserver
