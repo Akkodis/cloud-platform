@@ -1,0 +1,1883 @@
+openapi: 3.0.3
+info:
+  title: Cloud Platform API server
+  description: "API to manage pipeline instances and instace types in different 5GMETA\
+    \ MEC Servers. \nCloud components. The Instance API has the scope to consent the\
+    \ request of a \npipeline instance and receive the confirmation of the instance\
+    \ deployment. \nAn instance can be deleted, but not be modified or updated.\""
+  contact:
+    name: 5GMETA
+    url: https://5gmeta-project.eu/"
+    email: 5gmeta@akkodis.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about 5GMETA
+  url: https://5gmeta-project.eu/
+servers:
+- url: /api/v1
+tags:
+- name: types
+  description: Operations about instance types
+- name: instances
+  description: Operations about pipeline instances
+paths:
+  /mecs/{mec_id}/types:
+    get:
+      tags:
+      - types
+      summary: Get instance types in a specific MEC
+      operationId: get_types
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceType'
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.types_controller
+    post:
+      tags:
+      - types
+      summary: Add a new instance type in a specific MEC
+      operationId: post_type
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Type object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceType'
+        required: true
+        x-body-name: payload
+      responses:
+        "200":
+          description: Instance type successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceType'
+        "400":
+          description: Invalid instance type
+        "402":
+          description: The instance type already exists
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.types_controller
+  /mecs/{mec_id}/types/{type_id}:
+    get:
+      tags:
+      - types
+      summary: Get an instance type in a specific MEC
+      operationId: get_type
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type_id
+        in: path
+        description: Specify the type id to get information about the instance type
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceType'
+        "400":
+          description: Invalid instance type
+        "404":
+          description: Instance type not found
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.types_controller
+    delete:
+      tags:
+      - types
+      summary: Delete an instance type in a specific MEC
+      operationId: delete_type
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type_id
+        in: path
+        description: Specify the type id to delete the instance type
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Instance type successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceType'
+        "400":
+          description: Invalid instance type
+        "404":
+          description: Instance type not found
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.types_controller
+    patch:
+      tags:
+      - types
+      summary: Update an instance type in a specific MEC
+      operationId: patch_type
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type_id
+        in: path
+        description: Specify the type id to modify the instance type and/or the resources
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceType'
+        required: true
+        x-body-name: payload
+      responses:
+        "200":
+          description: Instance type successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceType'
+        "400":
+          description: Invalid instance type
+        "404":
+          description: Instance type not found
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.types_controller
+  /mecs/{mec_id}/instances:
+    get:
+      tags:
+      - instances
+      summary: Get the deployed instances in a specific MEC
+      operationId: get_instances
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instance'
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.instances_controller
+    post:
+      tags:
+      - instances
+      summary: Deploy a pipeline instance in a specific MEC
+      operationId: post_instance
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Instance'
+        required: true
+        x-body-name: payload
+      responses:
+        "200":
+          description: Reservation successfully made
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instance'
+        "400":
+          description: Invalid instance
+        "404":
+          description: The selected instance type is not available on this Edge server
+        "405":
+          description: The selected datatype is not available on this Edge server
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "501":
+          description: There are no enough resources to deploy the instance
+        "502":
+          description: Error orchestrating the pipeline instance
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.instances_controller
+  /mecs/{mec_id}/instances/{instance_id}:
+    get:
+      tags:
+      - instances
+      summary: Get a specific instance information in a specific MEC
+      operationId: get_instance
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: instance_id
+        in: path
+        description: Specify the instance ID to get the information
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instance'
+        "400":
+          description: Invalid instance
+        "404":
+          description: Instance not found
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.instances_controller
+    delete:
+      tags:
+      - instances
+      summary: Delete an instance in a specific MEC
+      operationId: delete_instance
+      parameters:
+      - name: mec_id
+        in: path
+        description: Specify the MEC id to get the information from a specific server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: instance_id
+        in: path
+        description: Specify the instance ID to delete the pipeline instance
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Instance successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instance'
+        "400":
+          description: Invalid instance
+        "404":
+          description: Instance not found
+        "414":
+          description: Edge server not found
+        "415":
+          description: Edge Instance API not avalaible in specified server
+        "510":
+          description: Failed to establish connection with Edge Instance API
+      x-openapi-router-controller: openapi_server.controllers.instances_controller
+
+  /mec/locations:
+    get:
+      tags:
+      - southbound services
+      summary: Get serving MEC servers with their locations
+      operationId: get_mec_locations
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MECLocationsList'
+        "404":
+          description: No services found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+  /mec:
+    get:
+      tags:
+      - southbound services
+      summary: Get all serving MEC servers
+      operationId: get_mecs
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MECInstanceList'
+        "404":
+          description: No services found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+    post:
+      tags:
+      - southbound services
+      summary: Register a MEC instance in the discovery service
+      operationId: post_mec
+      requestBody:
+        description: MEC information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MECCreation'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "404":
+          description: No services found
+          content: {}
+        "405":
+          description: Invalid input
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+  /mec/{mec_id}:
+    get:
+      tags:
+      - southbound services
+      summary: Get a serving MEC server
+      operationId: get_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MECInstanceList'
+        "400":
+          description: Invalid ID supplied
+          content: {}
+        "404":
+          description: No services found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+    delete:
+      tags:
+      - southbound services
+      summary: Delete a MEC
+      operationId: delete_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "400":
+          description: Invalid ID supplied
+          content: {}
+        "404":
+          description: No services found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+  /mec/tile:
+    get:
+      tags:
+      - southbound services
+      summary: Get list of tiles
+      operationId: get_tiles
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Invalid tile supplied
+          content: {}
+        "404":
+          description: No services found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+
+  /mec/tile/{tile}:
+    get:
+      tags:
+      - southbound services
+      summary: Find serving MEC in a tile
+      operationId: get_mec_tile
+      parameters:
+      - name: tile
+        in: path
+        description: Tile to get serving MEC
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MECInstanceList'
+        "401":
+          description: Invalid tile supplied
+          content: {}
+        "404":
+          description: No services found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+  /mec/{mec_id}/tile/{tile}:
+    post:
+      tags:
+      - southbound services
+      summary: Add serving tile to a MEC intance
+      operationId: post_tile_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: tile
+        in: path
+        description: Tile to post
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "400":
+          description: Invalid ID supplied
+          content: {}
+        "404":
+          description: No services found
+          content: {}
+        "405":
+          description: Invalid input
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+    delete:
+      tags:
+      - southbound services
+      summary: Delete a serving tile from a MEC instance
+      operationId: delete_tile_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: tile
+        in: path
+        description: Tile to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "400":
+          description: Invalid ID supplied
+          content: {}
+        "401":
+          description: Invalid tile supplied
+          content: {}
+        "404":
+          description: No services found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+
+  /mec/{mec_id}/nbservices:
+    get:
+      tags:
+      - northbound services
+      description: Get a northbound service information from a MEC
+      operationId: get_nbservices_from_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NBService'
+      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+    post:
+      tags:
+      - northbound services
+      description: Add a northbound service information to a MEC
+      operationId: add_nbservice_to_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NBService'
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+
+  /mec/{mec_id}/nbservices/{service_id}:
+    get:
+      tags:
+      - northbound services
+      description: Get a northbound service from a MEC
+      operationId: get_nbservice_from_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: service_id
+        in: path
+        description: Service ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NBService'
+      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+    delete:
+      tags:
+      - northbound services
+      description: Delete a northbound service in a MEC
+      operationId: delete_nbservice_in_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: service_id
+        in: path
+        description: Service ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+    patch:
+      tags:
+      - northbound services
+      description: Modify a northbound service in a MEC
+      operationId: modify_nbservice_in_mec
+      parameters:
+      - name: mec_id
+        in: path
+        description: MEC ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: service_id
+        in: path
+        description: Service ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NBService'
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+
+
+
+  /dataflows/{dataType}/query:
+    get:
+      tags:
+      - Dataflow catalogue
+      summary: Returns the list of ids of DataFlows that match the query
+      operationId: get_data_flows
+      parameters:
+      - name: dataType
+        in: path
+        description: Data type of the flow
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: dataSubType
+        in: query
+        description: Data subType of the flow
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: dataFormat
+        in: query
+        description: Data format of the flow
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: country
+        in: query
+        description: Source's country
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: quadkey
+        in: query
+        description: Source's quadkey
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: sourceId
+        in: query
+        description: Source's Id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: sourceType
+        in: query
+        description: Source's type (vehicle or infrastructure)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: extraParameters
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                - 1
+                - 2
+                - 3
+                - 5
+                - 8
+                items:
+                  type: integer
+                x-content-type: application/json
+        "405":
+          description: Invalid input
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.dataflow_catalogue_controller
+
+  /dataflows/{dataType}/query/count:
+    get:
+      tags:
+      - Dataflow catalogue
+      summary: Returns the number of dataFlows that match the query
+      operationId: count_data_flows
+      parameters:
+      - name: dataType
+        in: path
+        description: Data type of the flow
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: dataSubType
+        in: query
+        description: Data subType of the flow
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: dataFormat
+        in: query
+        description: Data format of the flow
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: country
+        in: query
+        description: Source's country
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: quadkey
+        in: query
+        description: Source's quadkey
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: sourceId
+        in: query
+        description: Source's Id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: sourceType
+        in: query
+        description: Source's type (vehicle or infrastructure)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: extraParameters
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: integer
+                example: 5
+                x-content-type: text/plain
+        "405":
+          description: Invalid input
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.dataflow_catalogue_controller
+
+  /datatypes/{quadkey}:
+    get:
+      tags:
+      - Dataflow catalogue
+      summary: Returns the possible dataTypes in a quadkey
+      operationId: get_datatypes
+      parameters:
+      - name: quadkey
+        in: path
+        description: Interesting quadkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+      x-openapi-router-controller: openapi_server.controllers.dataflow_catalogue_controller
+  /datatypes/{dataType}/properties:
+    get:
+      tags:
+      - Dataflow catalogue
+      summary: Returns the possible values for each field for a specific dataType
+      operationId: get_possible_value
+      parameters:
+      - name: dataType
+        in: path
+        description: Data type of the flow
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                x-content-type: text/plain
+        "405":
+          description: Not existing type
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.dataflow_catalogue_controller
+
+  /topics:
+    get:
+      tags:
+      - Topic management
+      summary: Returns the topics associated with that user
+      operationId: topics_by_user
+      parameters:
+      - name: X_Userinfo
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                example:
+                - "links_cpm_1, links_cam_1, links_video_1, links_cam_2, links_cam_3"
+                items:
+                  type: string
+                x-content-type: application/json
+        "404":
+          description: Not found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.topic_management_controller
+  /topics/{topicName}:
+    get:
+      tags:
+      - Topic management
+      summary: Returns the query that generated the topic
+      operationId: find_query_by_topic_name
+      parameters:
+      - name: topicName
+        in: path
+        description: Name of the topic
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X_Userinfo
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                x-content-type: text/plain
+        "404":
+          description: Not found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.topic_management_controller
+    delete:
+      tags:
+      - Topic management
+      summary: Delete a topic for the user
+      operationId: delete_topic
+      parameters:
+      - name: topicName
+        in: path
+        description: Name of the topic to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X_Userinfo
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content: {}
+        "404":
+          description: Not found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.topic_management_controller
+  /topics/{dataType}/query:
+    post:
+      tags:
+      - Topic management
+      summary: catalogue a Kafka topic for the user and returns the topic
+      operationId: create_topic
+      parameters:
+      - name: dataType
+        in: path
+        description: Data type of the flow
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: dataSubType
+        in: query
+        description: Data subType of the flow
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: dataFormat
+        in: query
+        description: Data format of the flow
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: instance_type
+        in: query
+        description: Instance Type of the pipeline processing the flow
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: quadkey
+        in: query
+        description: Source's quadkey
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: country
+        in: query
+        description: Source's country
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: sourceId
+        in: query
+        description: Source's Id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: sourceType
+        in: query
+        description: Source's type (vehicle or infrastructure)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: extraParameters
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+      - name: X_Userinfo
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: links_cpm_1
+                x-content-type: text/plain
+        "405":
+          description: Invalid input
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.topic_management_controller
+  /dataflows/{dataFlowId}:
+    get:
+      tags:
+      - Dataflow catalogue
+      summary: Returns the metadata of the choosen DataFlow
+      operationId: get_metadata
+      parameters:
+      - name: dataFlowId
+        in: path
+        description: Id of the dataFlow
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataFlow'
+        "404":
+          description: Invalid found
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.dataflow_catalogue_controller
+
+
+
+  /licenses:
+    get:
+      tags:
+      - "License"
+      summary: List with all the licenses
+      operationId: get_licenses
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license-list'
+              example:
+                licenses:
+                - _id: 0
+                  license:
+                    geolimit: city
+                    commercial: profit
+                - _id: 1
+                  license:
+                    geolimit: country
+                    commercial: non-profit
+                total_records: 2
+        "500":
+          description: Internal Server error
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.license_controller
+    post:
+      tags:
+      - "License"
+      summary: Create a new license
+      operationId: post_licenses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/license'
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license'
+        "400":
+          description: License already exists
+          content: {}
+        "500":
+          description: Internal Server error
+          content: {}
+      x-codegen-request-body-name: payload
+      x-openapi-router-controller: openapi_server.controllers.license_controller
+
+  /license/{license_id}:
+    get:
+      tags:
+      - "License"
+      summary: Get license_example information
+      operationId: get_license
+      parameters:
+      - name: license_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 0
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license'
+        "404":
+          description: License not found
+          content: {}
+        "500":
+          description: Internal Server error
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.license_controller
+    put:
+      tags:
+      - "License"
+      summary: Update license information
+      operationId: put_license
+      parameters:
+      - name: license_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/license-data'
+            example:
+              geolimit: city
+              commercial: profit
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license'
+              example:
+                _id: 1
+                license:
+                  geolimit: city
+                  commercial: profit
+        "404":
+          description: License not found
+          content: {}
+        "500":
+          description: Internal Server error
+          content: {}
+      x-codegen-request-body-name: payload
+      x-openapi-router-controller: openapi_server.controllers.license_controller
+    delete:
+      tags:
+      - "License"
+      summary: Delete a specific license
+      operationId: delete_license
+      parameters:
+      - name: license_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 0
+      responses:
+        "200":
+          description: Success
+          content: {}
+        "404":
+          description: License not found
+          content: {}
+        "500":
+          description: Internal Server error
+          content: {}
+      x-openapi-router-controller: openapi_server.controllers.license_controller
+
+components:
+  schemas:
+    InstanceType:
+      title: InstanceType
+      required:
+      - cpu
+      - gpu
+      - memory
+      - type_name
+      type: object
+      properties:
+        type_name:
+          type: string
+          description: Instance Type
+        cpu:
+          type: integer
+          description: CPU number
+          format: int64
+        memory:
+          type: integer
+          description: Total memory in GB
+          format: int64
+        gpu:
+          type: boolean
+          description: GPU available
+      example:
+        type_name: medium
+        cpu: 4
+        memory: 4
+        gpu: false
+      xml:
+        name: type
+    Instance:
+      title: Instance
+      required:
+      - datatype
+      - instance_type
+      - username
+      type: object
+      properties:
+        datatype:
+          type: string
+          description: Requested datatype
+        instance_type:
+          type: string
+          description: Requested instance type
+        username:
+          type: string
+          description: 5GMETA platform's client username
+      example:
+        datatype: cits
+        instance_type: medium
+        username: 5gmeta_user
+    license:
+      type: object
+      properties:
+        _id:
+          type: integer
+          description: Unique license identifier
+        license:
+          $ref: '#/components/schemas/license-data'
+      example:
+        license:
+          geolimit: geolimit
+          commercial: commercial
+        _id: 0
+    MECCreation:
+      type: object
+      properties:
+        name:
+          type: string
+        lat:
+          type: string
+        lng:
+          type: string
+        organization:
+          type: string
+        resources:
+          type: object
+          properties:
+            memory:
+              type: string
+            cpu:
+              type: string
+            gpu:
+              type: string
+            storage:
+              type: string
+        sb_services:
+          type: array
+          items:
+            $ref: '#/components/schemas/SBService'
+        props:
+          type: object
+        geolocation:
+          $ref: '#/components/schemas/GeolocationTileList'
+      example:
+        name: SanSebastian-MEC
+        lat: "43.2922071"
+        lng: "-1.987018,17"
+        organization: Vicomtech
+        resources:
+          memory: "16"
+          cpu: "12"
+          gpu: "true"
+          storage: 1000"
+        sb_services:
+        - service_name: message-broker
+          description: Message Broker
+          ip: "<ip>"
+          port: "5673"
+        - service_name: video-broker
+          description: Video Stream Broker
+          ip: "<ip>"
+          port: "8443"
+        - service_name: registration-api
+          description: Registration API
+          ip: "<ip>"
+          port: "12346"
+        props: {}
+        geolocation:
+        - tile-id: "0331110121011323"
+        - tile-id: "0331110121023020"
+      xml:
+        name: MECInstance
+    MECInstance:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        lat:
+          type: string
+        lng:
+          type: string
+        organization:
+          type: string
+        resources:
+          type: object
+          properties:
+            memory:
+              type: string
+            cpu:
+              type: string
+            gpu:
+              type: string
+            storage:
+              type: string
+        sb_services:
+          type: array
+          items:
+            $ref: '#/components/schemas/SBService'
+        props:
+          type: object
+        geolocation:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeolocationTileList'
+      example:
+        id: "1"
+        name: SanSebastian-MEC
+        organization: Vicomtech
+        lat: "43.2922071"
+        lng: "-1.987018,17"
+        resources:
+          memory: "16"
+          cpu: "12"
+          gpu: "true"
+          storage: "1000"
+        sb_services:
+        - service_name: message-broker
+          description: Message Broker
+          ip: "<ip>"
+          port: "5673"
+        - service_name: video-broker
+          description: Video Stream Broker
+          ip: "<ip>"
+          port: "8443"
+        - service_name: registration-api
+          description: Registration API
+          ip: "<ip>"
+          port: "12346"
+        props: "{}"
+        geolocation:
+        - tile-id: "033111012101132312"
+        - tile-id: "033111012102302012"
+      xml:
+        name: MECInstance
+    MECLocation:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        lat:
+          type: string
+        lng:
+          type: string
+        organization:
+          type: string
+        geolocation:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeolocationTileList'
+      example:
+        id: "1"
+        name: SanSebastian-MEC
+        organization: Vicomtech
+        geolocation:
+        - tile-id: "033111012101132312"
+        - tile-id: "033111012102302012"
+      xml:
+        name: MECInstance
+    MECLocationsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/MECLocation'
+    MECInstanceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/MECInstance'
+    SBService:
+      title: SBService
+      required:
+      - description
+      - ip
+      - port
+      - service_name
+      type: object
+      properties:
+        service_name:
+          type: string
+          description: Name of the exposed service in the MEC
+        ip:
+          type: string
+          description: IP of the service
+          format: ipv4
+        port:
+          type: string
+          description: Port of the service
+        description:
+          type: string
+          description: Description of the service
+        props:
+          type: string
+          description: JSON with extra information of the service
+          format: json
+      example:
+        service_name: message-broker
+        description: Message Broker
+        ip: "<ip>"
+        port: "5673"
+        props: props
+    NBService:
+      title: NBService
+      required:
+      - ip
+      - port
+      - service_name
+      type: object
+      properties:
+        service_name:
+          type: string
+          description: Name of the exposed service in the MEC
+        ip:
+          type: string
+          description: IP of the service
+          format: ipv4
+        port:
+          type: string
+          description: Port of the service
+        description:
+          type: string
+          description: Description of the service
+        props:
+          type: string
+          description: JSON with extra information of the service
+          format: json
+      example:
+        service_name: message-broker
+        description: Message Broker
+        ip: "<ip>"
+        port: "61616"
+        props: "{}"
+    GeolocationTileList:
+      type: array
+      items:
+        $ref: '#/components/schemas/GeolocationTile'
+    GeolocationTile:
+      type: object
+      properties:
+        zoom-level:
+          type: integer
+          default: 18
+        tile-id:
+          type: string
+      xml:
+        name: Geolocation
+      example:
+        tile-id: "033111012101132313"
+        zoom-level: 18
+
+
+    license-data:
+      required:
+      - commercial
+      - geolimit
+      type: object
+      properties:
+        geolimit:
+          type: string
+          description: "Geolimit: {local, city, country, global}"
+        commercial:
+          type: string
+          description: "Commercial: {profit, non-profit}"
+      example:
+        geolimit: geolimit
+        commercial: commercial
+    license-list:
+      type: object
+      properties:
+        licenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/license'
+        total_records:
+          type: integer
+          description: Total number of Licenses available
+      example:
+        licenses:
+        - license:
+            geolimit: geolimit
+            commercial: commercial
+          _id: 0
+        - license:
+            geolimit: geolimit
+            commercial: commercial
+          _id: 0
+        total_records: 0
+    DataFlow:
+      required:
+      - dataFlowId
+      - dataInfo
+      - dataSourceInfo
+      - dataTypeInfo
+      - licenseInfo
+      type: object
+      properties:
+        dataFlowId:
+          type: string
+        dataTypeInfo:
+          $ref: '#/components/schemas/DataTypeInfo'
+        dataInfo:
+          $ref: '#/components/schemas/DataInfo'
+        licenseInfo:
+          $ref: '#/components/schemas/LicenseInfo'
+        dataSourceInfo:
+          $ref: '#/components/schemas/DataSourceInfo'
+      example:
+        dataTypeInfo:
+          dataType: dataType
+          dataSubType: dataSubType
+        dataInfo:
+          dataFormat: dataFormat
+          dataSampleRate: 0.80082819046101150206595775671303272247314453125
+          dataflowDirection: dataflowDirection
+          extraAttributes: extraAttributes
+        licenseInfo:
+          licenseType: licenseType
+          licenseGeolimit: 6
+        dataFlowId: dataFlowId
+        dataSourceInfo:
+          sourceId: sourceId
+          timeRegistration: 5
+          timeStratumLevel: 7
+          sourceType: 1
+          timeLastUpdate: 5
+          timeZone: 2
+          sourceLocationInfo:
+            locationCountry: locationCountry
+            locationLatitude: 9.301444243932575517419536481611430644989013671875
+            locationLongitude: 3.61607674925191080461672754609026014804840087890625
+            locationQuadkey: locationQuadkey
+    DataInfo:
+      required:
+      - dataflowDirection
+      - dataSampleRate
+      type: object
+      properties:
+        dataflowDirection:
+          type: string
+        dataFormat:
+          type: string
+        dataSampleRate:
+          type: number
+        extraAttributes:
+          type: string
+      example:
+        dataFormat: dataFormat
+        dataSampleRate: 0.80082819046101150206595775671303272247314453125
+        dataflowDirection: dataflowDirection
+        extraAttributes: extraAttributes
+    LicenseInfo:
+      required:
+      - licenseGeolimit
+      - licenseType
+      type: object
+      properties:
+        licenseType:
+          type: string
+        licenseGeolimit:
+          type: integer
+      example:
+        licenseType: licenseType
+        licenseGeolimit: 6
+    SourceLocationInfo:
+      required:
+      - locationQuadkey
+      type: object
+      properties:
+        locationCountry:
+          type: string
+        locationLatitude:
+          type: number
+        locationLongitude:
+          type: number
+        locationQuadkey:
+          type: string
+      example:
+        locationCountry: locationCountry
+        locationLatitude: 9.301444243932575517419536481611430644989013671875
+        locationLongitude: 3.61607674925191080461672754609026014804840087890625
+        locationQuadkey: locationQuadkey
+    DataSourceInfo:
+      required:
+      - sourceId
+      - sourceLocationInfo
+      - sourceType
+      - timeLastUpdate
+      - timeRegistration
+      type: object
+      properties:
+        sourceId:
+          type: string
+        sourceType:
+          type: integer
+        timeRegistration:
+          type: integer
+        timeLastUpdate:
+          type: integer
+        timeZone:
+          type: integer
+        timeStratumLevel:
+          type: integer
+        sourceLocationInfo:
+          $ref: '#/components/schemas/SourceLocationInfo'
+      example:
+        sourceId: sourceId
+        timeRegistration: 5
+        timeStratumLevel: 7
+        sourceType: 1
+        timeLastUpdate: 5
+        timeZone: 2
+        sourceLocationInfo:
+          locationCountry: locationCountry
+          locationLatitude: 9.301444243932575517419536481611430644989013671875
+          locationLongitude: 3.61607674925191080461672754609026014804840087890625
+          locationQuadkey: locationQuadkey
+    DataTypeInfo:
+      required:
+      - dataSubType
+      - dataType
+      type: object
+      properties:
+        dataType:
+          type: string
+        dataSubType:
+          type: string
+      example:
+        dataType: dataType
+        dataSubType: dataSubType
+
+  responses:
+    MaskError:
+      description: When any error occurs on mask
+      content: {}
+    ParseError:
+      description: When a mask can't be parsed
+      content: {}
+
+  securitySchemes:
+
+    auth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://192.168.15.175:8080/auth/realms/5gmeta/protocol/openid-connect/auth
+          tokenUrl: http://192.168.15.175:8080/auth/realms/5gmeta/protocol/openid-connect/token
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+      x-tokenInfoFunc: openapi_server.controllers.authorization_controller.check_auth
+      x-scopeValidateFunc: openapi_server.controllers.authorization_controller.validate_scope_auth
+
+    "5gmeta_oauth2":
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://5gmeta-project.eu/oauth/dialog
+          scopes:
+            write:services: modify services
+            read:services: read your services
+      x-tokenInfoFunc: openapi_server.controllers.authorization_controller.check_5gmeta_oauth2
+      x-scopeValidateFunc: openapi_server.controllers.authorization_controller.validate_scope_5gmeta_oauth2
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+      x-apikeyInfoFunc: openapi_server.controllers.authorization_controller.check_api_key
