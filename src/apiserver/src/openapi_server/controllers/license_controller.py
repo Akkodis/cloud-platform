@@ -67,8 +67,8 @@ def post_licenses(body):  # noqa: E501
 
     :rtype: License
     """
-    if connexion.request.is_json:
-        body = License.from_dict(connexion.request.get_json())  # noqa: E501
+    if connexion.request.mimetype == "application/json":
+        body = License.from_dict( connexion.request.json())  # noqa: E501
 
     if len(list(db['licenses'].find({'_id': body.id}))) == 0:
         db['licenses'].insert_one({'_id': body.id, 'license': str(body.license)})
@@ -90,8 +90,8 @@ def put_license(body, license_id):  # noqa: E501
 
     :rtype: License
     """
-    if connexion.request.is_json:
-        body = LicenseData.from_dict(connexion.request.get_json())  # noqa: E501
+    if connexion.request.mimetype == "application/json":
+        body = LicenseData.from_dict(connexion.request.json())  # noqa: E501
     if len(list(db['licenses'].find({'_id': license_id}))) > 0:
         db['licenses'].update_one({'_id': license_id}, {'$set': {'_id': license_id, 'license': str(body)}})
         return "License update with success", 200
