@@ -92,7 +92,7 @@ env:
   - name: activemq_user_password
     value: "5gmeta-platform"
   - name: database_url
-    value: "mongodb://5gmeta-platform:5gmeta-platform@mongodb.cloud-platform.svc.cluster.local:27017"
+    value: "mongodb://mongodb.cloud-platform.svc.cluster.local"
   - name: db_host
     value: "mysql-cluster.cloud-platform.svc.cluster.local"
   - name: db_root_password

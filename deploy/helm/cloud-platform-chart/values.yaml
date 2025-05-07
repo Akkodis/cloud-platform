@@ -137,6 +137,7 @@ mongodb:
   fullnameOverride: mongodb
   architecture: "standalone"
   auth:
+    enabled: false
     usernames:
       - "5gmeta-platform"
     passwords:

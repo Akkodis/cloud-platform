@@ -19,7 +19,23 @@ data:
         uri: /*
         upstream:
             nodes:
-                    "superset.superset.svc.cluster.local:80": 1
+                    "superset.superset.svc.cluster.local:8088": 1
+            type: roundrobin
+        priority: 201
+
+      -
+        uri: /grafana/*
+        upstream:
+            nodes:
+                    "grafana.{{ .Release.Namespace }}.svc.cluster.local:80": 1
+            type: roundrobin
+        priority: 201
+
+      -
+        uri: /kafka-ui/*
+        upstream:
+            nodes:
+                    "kafka-ui.{{ .Release.Namespace }}.svc.cluster.local:80": 1
             type: roundrobin
         priority: 201
 
@@ -71,21 +87,7 @@ data:
             cors:
                 allow_origins: "*"
 
-      -
-        uri: /grafana/*
-        upstream:
-            nodes:
-                    "grafana.{{ .Release.Namespace }}.svc.cluster.local:80": 1
-            type: roundrobin
-        priority: 201
 
-      -
-        uri: /kafka-ui/*
-        upstream:
-            nodes:
-                    "kafka-ui.{{ .Release.Namespace }}.svc.cluster.local:80": 1
-            type: roundrobin
-        priority: 201
 
       -
         uri: /prometheus/*
