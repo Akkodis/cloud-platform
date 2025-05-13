@@ -119,13 +119,8 @@ git clone git@github.com:Akkodis/cloud-platform.git
 ```bash
 cd cloud-platform
 
-# Install Apache Superet
-helm repo add superset https://apache.github.io/superset
-helm upgrade --install --values deploy/helm/superset/values.yaml superset superset/superset -n superset --create-namespace
-
 # Install other components
 kubectl create namespace cert-manager
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
 helm dependency build deploy/helm/cloud-platform-chart
 helm install cloud-platform deploy/helm/cloud-platform-chart -n cloud-platform --create-namespace
 ```
@@ -134,6 +129,7 @@ helm install cloud-platform deploy/helm/cloud-platform-chart -n cloud-platform -
 Apache Superset has been used as replacement of the Dashboard developped during the 5GMETA project. To install superset, type the following commands
 
 ```bash
+cd deploy/helm/apache-superset
 kubectl create namespace superset
 helm repo add superset https://apache.github.io/superset
 helm upgrade --install --values values.yaml superset superset/superset -n superset
