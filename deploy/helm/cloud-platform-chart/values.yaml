@@ -74,6 +74,8 @@ kube-prometheus-stack:
         root_url: https://5gmeta-plaform.eu/grafana/
         serve_from_sub_path: true
 
+
+# Mysql used to store the dataflows
 mysql:
   fullnameOverride: mysql-cluster
   architecture: standalone
@@ -132,7 +134,7 @@ keycloak:
       password: keycloak-db-password
 
 
-# Mongodb 
+# Mongodb used to store the licenses 
 mongodb:
   fullnameOverride: mongodb
   architecture: "standalone"
@@ -146,6 +148,6 @@ mongodb:
     databases:
       - "license-database"
 
-# 5GMETA Cloud Platform modules
+# 5GMETA Cloud Platform API Server
 apiserver-chart:
   fullnameOverride: apiserver

@@ -30,15 +30,15 @@ dependencies:
 
 - name: cert-manager
   repository: https://charts.jetstack.io
-  version: v1.16.2
+  version: v1.17.2
 
 - name: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
-  version: 67.4.0
+  version: 72.2.0
     
 - name: mysql
   repository: https://charts.bitnami.com/bitnami
-  version: 12.2.0
+  version: 12.3.5
 
 - name: apisix
   repository: https://charts.bitnami.com/bitnami
@@ -46,7 +46,7 @@ dependencies:
 
 - name: keycloak
   repository: https://charts.bitnami.com/bitnami  
-  version: 24.4.10 
+  version: 24.6.6
 
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami

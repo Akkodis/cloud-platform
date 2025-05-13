@@ -54,7 +54,7 @@ data:
         `service_id` int(11) NOT NULL AUTO_INCREMENT,
         `mec_id` int(11) NOT NULL,
         `service_name` varchar(100) NOT NULL,
-        `ip` varchar(15) DEFAULT NULL,
+        `host` varchar(50) DEFAULT NULL,
         `port` int(11) DEFAULT NULL,
         `description` varchar(100) DEFAULT NULL,
         `props` json DEFAULT NULL,

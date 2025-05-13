@@ -81,29 +81,25 @@ env:
     value: "mysql-cluster.cloud-platform.svc.cluster.local"
   - name: DB_PORT
     value: "3306"
-  - name: DB_NAME
+  - name: DATAFLOW_DB_NAME
     value: "dataflowdb"
   - name: KAFKA_IP
     value: "cloud-platform-cp-ksql-server.cloud-platform.svc.cluster.local"
   - name: KAFKA_PORT
     value: "8088"
-  - name: activemq_user_name
+  - name: AMQP_USER
     value: "5gmeta-platform"
-  - name: activemq_user_password
+  - name: AMQP_PASSWORD
     value: "5gmeta-platform"
   - name: database_url
-    value: "mongodb://mongodb.cloud-platform.svc.cluster.local"
-  - name: db_host
-    value: "mysql-cluster.cloud-platform.svc.cluster.local"
-  - name: db_root_password
-    valueFrom:
-      secretKeyRef:
-        name: mysql-cluster
-        key: mysql-password
-  - name: db_name
+    value: "mongodb://mongodb.cloud-platform.svc.cluster.local"      
+  - name: DISCOVERY_DB_NAME
     value: "discoverydb"
   - name: license-db
     value: "license-database"
+  - name: APISERVER_URL
+    value: "http://apiserver.cloud-platform.svc.cluster.local:5000/api/v1"
+
 
 autoscaling:
   enabled: false
