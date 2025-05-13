@@ -14,13 +14,13 @@ class SBService(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, service_name: str=None, ip: str=None, port: int=None, description: str=None, props: str=None):  # noqa: E501
+    def __init__(self, service_name: str=None, host: str=None, port: int=None, description: str=None, props: str=None):  # noqa: E501
         """SBService - a model defined in Swagger
 
         :param service_name: The service_name of this SBService.  # noqa: E501
         :type service_name: str
-        :param ip: The ip of this SBService.  # noqa: E501
-        :type ip: str
+        :param host: The ip of this SBService.  # noqa: E501
+        :type host: str
         :param port: The port of this SBService.  # noqa: E501
         :type port: int
         :param description: The description of this SBService.  # noqa: E501
@@ -30,7 +30,7 @@ class SBService(Model):
         """
         self.swagger_types = {
             'service_name': str,
-            'ip': str,
+            'host': str,
             'port': int,
             'description': str,
             'props': str
@@ -38,13 +38,13 @@ class SBService(Model):
 
         self.attribute_map = {
             'service_name': 'service_name',
-            'ip': 'ip',
+            'host': 'host',
             'port': 'port',
             'description': 'description',
             'props': 'props'
         }
         self._service_name = service_name
-        self._ip = ip
+        self._host = host
         self._port = port
         self._description = description
         self._props = props
@@ -86,29 +86,29 @@ class SBService(Model):
         self._service_name = service_name
 
     @property
-    def ip(self) -> str:
-        """Gets the ip of this SBService.
+    def host(self) -> str:
+        """Gets the host of this SBService.
 
-        IP of the service  # noqa: E501
+        HOST of the service  # noqa: E501
 
         :return: The ip of this SBService.
         :rtype: str
         """
-        return self._ip
+        return self._host
 
-    @ip.setter
-    def ip(self, ip: str):
-        """Sets the ip of this SBService.
+    @host.setter
+    def host(self, ip: str):
+        """Sets the host of this SBService.
 
-        IP of the service  # noqa: E501
+        HOST of the service  # noqa: E501
 
-        :param ip: The ip of this SBService.
-        :type ip: str
+        :param host: The ip of this SBService.
+        :type host: str
         """
-        if ip is None:
-            raise ValueError("Invalid value for `ip`, must not be `None`")  # noqa: E501
+        if host is None:
+            raise ValueError("Invalid value for `host`, must not be `None`")  # noqa: E501
 
-        self._ip = ip
+        self._host = host
 
     @property
     def port(self) -> int:

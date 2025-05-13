@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Cloud Platform API server
+  title: 5G-META Cloud Platform API Server
   description: "API to manage pipeline instances and instace types in different 5GMETA\
     \ MEC Servers. \nCloud components. The Instance API has the scope to consent the\
     \ request of a \npipeline instance and receive the confirmation of the instance\
@@ -19,15 +19,15 @@ externalDocs:
 servers:
 - url: /api/v1
 tags:
-- name: types
+- name: Types
   description: Operations about instance types
-- name: instances
+- name: Instances
   description: Operations about pipeline instances
 paths:
   /mecs/{mec_id}/types:
     get:
       tags:
-      - types
+      - Types
       summary: Get instance types in a specific MEC
       operationId: get_types
       parameters:
@@ -52,10 +52,10 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.types_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
     post:
       tags:
-      - types
+      - Types
       summary: Add a new instance type in a specific MEC
       operationId: post_type
       parameters:
@@ -92,11 +92,11 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.types_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
   /mecs/{mec_id}/types/{type_id}:
     get:
       tags:
-      - types
+      - Types
       summary: Get an instance type in a specific MEC
       operationId: get_type
       parameters:
@@ -133,10 +133,10 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.types_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
     delete:
       tags:
-      - types
+      - Types
       summary: Delete an instance type in a specific MEC
       operationId: delete_type
       parameters:
@@ -173,10 +173,10 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.types_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
     patch:
       tags:
-      - types
+      - Types
       summary: Update an instance type in a specific MEC
       operationId: patch_type
       parameters:
@@ -220,11 +220,11 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.types_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
   /mecs/{mec_id}/instances:
     get:
       tags:
-      - instances
+      - Instances
       summary: Get the deployed instances in a specific MEC
       operationId: get_instances
       parameters:
@@ -249,10 +249,10 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.instances_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
     post:
       tags:
-      - instances
+      - Instances
       summary: Deploy a pipeline instance in a specific MEC
       operationId: post_instance
       parameters:
@@ -294,11 +294,11 @@ paths:
           description: Error orchestrating the pipeline instance
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.instances_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
   /mecs/{mec_id}/instances/{instance_id}:
     get:
       tags:
-      - instances
+      - Instances
       summary: Get a specific instance information in a specific MEC
       operationId: get_instance
       parameters:
@@ -335,10 +335,10 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.instances_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
     delete:
       tags:
-      - instances
+      - Instances
       summary: Delete an instance in a specific MEC
       operationId: delete_instance
       parameters:
@@ -375,12 +375,12 @@ paths:
           description: Edge Instance API not avalaible in specified server
         "510":
           description: Failed to establish connection with Edge Instance API
-      x-openapi-router-controller: openapi_server.controllers.instances_controller
+      x-openapi-router-controller: openapi_server.controllers.types_instances_controller
 
   /mec/locations:
     get:
       tags:
-      - southbound services
+      - Southbound services
       summary: Get serving MEC servers with their locations
       operationId: get_mec_locations
       responses:
@@ -397,7 +397,7 @@ paths:
   /mec:
     get:
       tags:
-      - southbound services
+      - Southbound services
       summary: Get all serving MEC servers
       operationId: get_mecs
       responses:
@@ -410,10 +410,10 @@ paths:
         "404":
           description: No services found
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
     post:
       tags:
-      - southbound services
+      - Southbound services
       summary: Register a MEC instance in the discovery service
       operationId: post_mec
       requestBody:
@@ -433,11 +433,11 @@ paths:
         "405":
           description: Invalid input
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
   /mec/{mec_id}:
     get:
       tags:
-      - southbound services
+      - Southbound services
       summary: Get a serving MEC server
       operationId: get_mec
       parameters:
@@ -462,10 +462,10 @@ paths:
         "404":
           description: No services found
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
     delete:
       tags:
-      - southbound services
+      - Southbound services
       summary: Delete a MEC
       operationId: delete_mec
       parameters:
@@ -487,11 +487,11 @@ paths:
         "404":
           description: No services found
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
   /mec/tile:
     get:
       tags:
-      - southbound services
+      - Southbound services
       summary: Get list of tiles
       operationId: get_tiles
       responses:
@@ -503,12 +503,12 @@ paths:
         "404":
           description: No services found
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
 
   /mec/tile/{tile}:
     get:
       tags:
-      - southbound services
+      - Southbound services
       summary: Find serving MEC in a tile
       operationId: get_mec_tile
       parameters:
@@ -533,11 +533,11 @@ paths:
         "404":
           description: No services found
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
   /mec/{mec_id}/tile/{tile}:
     post:
       tags:
-      - southbound services
+      - Southbound services
       summary: Add serving tile to a MEC intance
       operationId: post_tile_mec
       parameters:
@@ -570,10 +570,10 @@ paths:
         "405":
           description: Invalid input
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
     delete:
       tags:
-      - southbound services
+      - Southbound services
       summary: Delete a serving tile from a MEC instance
       operationId: delete_tile_mec
       parameters:
@@ -606,12 +606,12 @@ paths:
         "404":
           description: No services found
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
 
   /mec/{mec_id}/nbservices:
     get:
       tags:
-      - northbound services
+      - Northbound services
       description: Get a northbound service information from a MEC
       operationId: get_nbservices_from_mec
       parameters:
@@ -630,10 +630,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NBService'
-      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
     post:
       tags:
-      - northbound services
+      - Northbound services
       description: Add a northbound service information to a MEC
       operationId: add_nbservice_to_mec
       parameters:
@@ -654,12 +654,12 @@ paths:
         "200":
           description: Successful operation
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
 
   /mec/{mec_id}/nbservices/{service_id}:
     get:
       tags:
-      - northbound services
+      - Northbound services
       description: Get a northbound service from a MEC
       operationId: get_nbservice_from_mec
       parameters:
@@ -686,10 +686,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NBService'
-      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
     delete:
       tags:
-      - northbound services
+      - Northbound services
       description: Delete a northbound service in a MEC
       operationId: delete_nbservice_in_mec
       parameters:
@@ -713,10 +713,10 @@ paths:
         "200":
           description: Successful operation
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
     patch:
       tags:
-      - northbound services
+      - Northbound services
       description: Modify a northbound service in a MEC
       operationId: modify_nbservice_in_mec
       parameters:
@@ -745,8 +745,7 @@ paths:
         "200":
           description: Successful operation
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.northbound_services_controller
-
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
 
 
   /dataflows/{dataType}/query:
@@ -1469,15 +1468,15 @@ components:
         sb_services:
         - service_name: message-broker
           description: Message Broker
-          ip: "<ip>"
+          host: "<host>"
           port: "5673"
         - service_name: video-broker
           description: Video Stream Broker
-          ip: "<ip>"
+          host: "<host>"
           port: "8443"
         - service_name: registration-api
           description: Registration API
-          ip: "<ip>"
+          host: "<host>"
           port: "12346"
         props: {}
         geolocation:
@@ -1533,15 +1532,15 @@ components:
         sb_services:
         - service_name: message-broker
           description: Message Broker
-          ip: "<ip>"
+          host: "<host>"
           port: "5673"
         - service_name: video-broker
           description: Video Stream Broker
-          ip: "<ip>"
+          host: "<host>"
           port: "8443"
         - service_name: registration-api
           description: Registration API
-          ip: "<ip>"
+          host: "<host>"
           port: "12346"
         props: "{}"
         geolocation:
@@ -1587,7 +1586,7 @@ components:
       title: SBService
       required:
       - description
-      - ip
+      - host
       - port
       - service_name
       type: object
@@ -1595,10 +1594,10 @@ components:
         service_name:
           type: string
           description: Name of the exposed service in the MEC
-        ip:
+        host:
           type: string
           description: IP of the service
-          format: ipv4
+          format: hostname
         port:
           type: string
           description: Port of the service
@@ -1612,13 +1611,13 @@ components:
       example:
         service_name: message-broker
         description: Message Broker
-        ip: "<ip>"
+        host: "<host>"
         port: "5673"
         props: props
     NBService:
       title: NBService
       required:
-      - ip
+      - host
       - port
       - service_name
       type: object
@@ -1626,10 +1625,10 @@ components:
         service_name:
           type: string
           description: Name of the exposed service in the MEC
-        ip:
+        host:
           type: string
-          description: IP of the service
-          format: ipv4
+          description: Hostname of the service
+          format: hostname
         port:
           type: string
           description: Port of the service
@@ -1643,7 +1642,7 @@ components:
       example:
         service_name: message-broker
         description: Message Broker
-        ip: "<ip>"
+        host: "<host>"
         port: "61616"
         props: "{}"
     GeolocationTileList:
@@ -1851,33 +1850,3 @@ components:
     ParseError:
       description: When a mask can't be parsed
       content: {}
-
-  securitySchemes:
-
-    auth:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: http://192.168.15.175:8080/auth/realms/5gmeta/protocol/openid-connect/auth
-          tokenUrl: http://192.168.15.175:8080/auth/realms/5gmeta/protocol/openid-connect/token
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
-      x-tokenInfoFunc: openapi_server.controllers.authorization_controller.check_auth
-      x-scopeValidateFunc: openapi_server.controllers.authorization_controller.validate_scope_auth
-
-    "5gmeta_oauth2":
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: http://5gmeta-project.eu/oauth/dialog
-          scopes:
-            write:services: modify services
-            read:services: read your services
-      x-tokenInfoFunc: openapi_server.controllers.authorization_controller.check_5gmeta_oauth2
-      x-scopeValidateFunc: openapi_server.controllers.authorization_controller.validate_scope_5gmeta_oauth2
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
-      x-apikeyInfoFunc: openapi_server.controllers.authorization_controller.check_api_key

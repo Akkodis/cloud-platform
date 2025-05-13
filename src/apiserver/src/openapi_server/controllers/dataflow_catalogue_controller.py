@@ -15,13 +15,13 @@ import json
 
 import os
 
-db_ip = os.environ["DB_IP"]
+db_host = os.environ["CLOUD_HOST"]
 db_port = os.environ["DB_PORT"]
 db_user = os.environ["DB_USER"]
 db_password = os.environ["DB_PASSWORD"]
-db_name = os.environ["DB_NAME"]
+db_name = os.environ["DATAFLOW_DB_NAME"]
 
-engine = db.create_engine('mysql+pymysql://'+db_user+':'+db_password+'@'+db_ip+':'+db_port+'/'+db_name, isolation_level="READ UNCOMMITTED")
+engine = db.create_engine('mysql+pymysql://'+db_user+':'+db_password+'@'+db_host+':'+db_port+'/'+db_name, isolation_level="READ UNCOMMITTED")
 # connection = engine.connect()
 metadata = db.MetaData()
 dataflows = db.Table('dataflows', metadata, autoload_with=engine)

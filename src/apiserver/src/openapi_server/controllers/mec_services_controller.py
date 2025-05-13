@@ -5,7 +5,7 @@ from openapi_server.models.mec_instance import MECInstance
 from openapi_server.models.mec_creation import MECCreation  # noqa: E501
 from openapi_server.models.mec_instance_list import MECInstanceList  # noqa: E501
 from openapi_server import util
-
+from openapi_server.models.nb_service import NBService  # noqa: E501
 from openapi_server.controllers.data_5gmeta_functions import * #check_is_a_tile, get_mecinstances_by_tile
 
 
@@ -132,6 +132,7 @@ def get_mec_tile(tile):  # noqa: E501
     return get_mecinstances_by_tile(tile)
 
 
+
 def post_mec(body):  # noqa: E501
     """Register a MEC instance in the discovery service
 
@@ -142,19 +143,19 @@ def post_mec(body):  # noqa: E501
 
     :rtype: None
 
-    if connexion.request.is_json:
-        body = MECCreation.from_dict(connexion.request.get_json())  # noqa: E501
+    if connexion.request.mimetype == "application/json":
+        body = MECCreation.from_dict(connexion.request.json())  # noqa: E501
     return 'do some magic!'
     """
     mec_id = -1
-    if connexion.request.is_json:
-        body = MECCreation.from_dict(connexion.request.get_json())  # noqa: E501
-        body_json = connexion.request.get_json()
+    if connexion.request.mimetype == "application/json":
+
+
+    print(get_body_json())
+    #res = "Modified/Create MEC " + body.id + " org: " + body.organization
+    #print("Res " + res + " " + str(body_json), flush=True)
         
-        #res = "Modified/Create MEC " + body.id + " org: " + body.organization 
-        #print("Res " + res + " " + str(body_json), flush=True)
-        
-        mec_id = add_new_mecserver( body.name, body.lat, body.lng, body.organization, body_json['resources'], body_json['sb_services'], body_json['props'],body_json['geolocation'])
+    mec_id = add_new_mecserver(body_json['name'], body_json['lat'], body_json['lng'], body_json['organization'], body_json['resources'], body_json['sb_services'], body_json['props'],body_json['geolocation'])
 
         # for each time in the body add a tile to the MEC
 
@@ -218,12 +219,12 @@ def update_mec(body, tile):
 
     :rtype: None
     
-    if connexion.request.is_json:
-        body = MECInstance.from_dict(connexion.request.get_json())  # noqa: E501
+    if connexion.request.mimetype == "application/json":
+        body = MECInstance.from_dict(connexion.request.json())  # noqa: E501
     """    
     res = ""
-    if connexion.request.is_json:
-        body = MECInstance.from_dict(connexion.request.get_json())
+    if connexion.request.mimetype == "application/json":
+        body = MECInstance.from_dict(connexion.request.json())
         res = "Modified/Create MEC " + body.id + " org: " + body.organization +  " adding tile " + tile
         mec_id =int(body.id)
         print(res, flush=True)
@@ -248,3 +249,140 @@ def update_mec(body, tile):
 
     else: 
       return res, 200
+
+
+def add_nbservice_to_mec(mec_id, body=None):  # noqa: E501
+    """add_nbservice_to_mec
+
+    Add a northbound service information to a MEC # noqa: E501
+
+    :param mec_id: MEC ID
+    :type mec_id: str
+    :param body:
+    :type body: dict | bytes
+
+    :rtype: None
+    """
+    if (check_mec_id_exists(mec_id)):
+        print("MEC ID EXISTS", flush=True)
+    else:
+        print("MEC ID NOT EXISTS", flush=True)
+        return jsonify({'message':"MEC ID NOT EXISTS"}), 404
+
+    if connexion.request.is_json:
+        body = NBService.from_dict(connexion.request.get_json())  # noqa: E501z
+        body_json = connexion.request.get_json()
+
+    return add_new_nbservice( mec_id, body.service_name, body.ip, body.port, body.description, body.props)
+
+
+def delete_nbservice_in_mec(mec_id, service_id):  # noqa: E501
+    """delete_nbservice_in_mec
+
+    Delete a northbound service in a MEC # noqa: E501
+
+    :param mec_id: MEC ID
+    :type mec_id: str
+    :param service_id: Service ID
+    :type service_id: str
+
+    :rtype: None
+    """
+    if (check_mec_id_exists(mec_id)):
+        print("MEC ID EXISTS", flush=True)
+    else:
+        print("MEC ID NOT EXISTS", flush=True)
+        return jsonify({'message':"MEC ID NOT EXISTS"}), 404
+
+    if (check_service_id_exists(mec_id, service_id)):
+        print("SERVICE ID EXISTS", flush=True)
+    else:
+        print("SERVICE ID NOT EXISTS IN SPECIFIED MEC ID", flush=True)
+        return jsonify({"message":"SERVICE ID NOT EXISTS IN SPECIFIED MEC ID","mec_id":mec_id,"service_id":service_id}), 404
+
+    if( delete_nbservice(mec_id, service_id ) ):
+        return jsonify({"message":"Service deleted","mec_id":mec_id,"service_id":service_id}), 200
+    else:
+        return jsonify({"message":"Service could not be deleted","mec_id":mec_id,"service_id":service_id}), 400
+
+
+def get_nbservice_from_mec(mec_id, service_id):  # noqa: E501
+    """get_nbservice_from_mec
+
+    Get a northbound service from a MEC # noqa: E501
+
+    :param mec_id: MEC ID
+    :type mec_id: str
+    :param service_id: Service ID
+    :type service_id: str
+
+    :rtype: NBService
+    """
+    if (check_mec_id_exists(mec_id)):
+        print("MEC ID EXISTS", flush=True)
+    else:
+        print("MEC ID NOT EXISTS", flush=True)
+        return jsonify({'message':"MEC ID NOT EXISTS"}), 404
+
+    if (check_service_id_exists(mec_id, service_id)):
+        print("SERVICE ID EXISTS", flush=True)
+    else:
+        print("SERVICE ID NOT EXISTS IN SPECIFIED MEC ID", flush=True)
+        return jsonify({"message":"SERVICE ID NOT EXISTS IN SPECIFIED MEC ID","mec_id":mec_id,"service_id":service_id}), 404
+
+    return get_nbservice(mec_id, service_id)
+
+
+def get_nbservices_from_mec(mec_id):  # noqa: E501
+    """get_nbservices_from_mec
+
+    Get a northbound service information from a MEC # noqa: E501
+
+    :param mec_id: MEC ID
+    :type mec_id: str
+
+    :rtype: NBService
+    """
+    if (check_mec_id_exists(mec_id)):
+        print("MEC ID EXISTS", flush=True)
+    else:
+        print("MEC ID NOT EXISTS", flush=True)
+        return jsonify({'message':"MEC ID NOT EXISTS"}), 404
+
+    return get_nbservices(mec_id)
+
+
+def modify_nbservice_in_mec(mec_id, service_id, body=None):  # noqa: E501
+    """modify_nbservice_in_mec
+
+    Modify a northbound service in a MEC # noqa: E501
+
+    :param mec_id: MEC ID
+    :type mec_id: str
+    :param service_id: Service ID
+    :type service_id: str
+    :param body:
+    :type body: dict | bytes
+
+    :rtype: None
+    """
+    if (check_mec_id_exists(mec_id)):
+        print("MEC ID EXISTS", flush=True)
+    else:
+        print("MEC ID NOT EXISTS", flush=True)
+        return jsonify({'message':"MEC ID NOT EXISTS"}), 404
+
+    if (check_service_id_exists(mec_id, service_id)):
+        print("SERVICE ID EXISTS", flush=True)
+    else:
+        print("SERVICE ID NOT EXISTS IN SPECIFIED MEC ID", flush=True)
+        return jsonify({"message":"SERVICE ID NOT EXISTS IN SPECIFIED MEC ID","mec_id":mec_id,"service_id":service_id}), 404
+
+    if connexion.request.is_json:
+        body = NBService.from_dict(connexion.request.get_json())  # noqa: E501z
+        body_json = connexion.request.get_json()
+
+    if( modify_nbservice( mec_id, service_id, body.service_name, body.ip, body.port, body.description, body.props) ):
+        return jsonify({'service_id':service_id,"message":"updated"}), 200
+    else:
+        return jsonify({'message':"Not deleted"}), 400
