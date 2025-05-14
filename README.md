@@ -21,7 +21,6 @@ The following requirements are needed to be able to deploy the platform:
 -  [Helm v3](https://helm.sh/docs/intro/install/)
 -  Optional [Docker](https://www.docker.com/get-started/) as provider for Minikube. Other providers can be selected e.g Podman, VirutualBox, etc.
 -  Optional [Terraform](https://developer.hashicorp.com/terraform/install?product_intent=terraform) used to deploy on Amazon EKS
--  Optional [NVIDIA GPU Operator](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/getting-started.html#install-nvidia-gpu-operator) automatically setups and manages the NVIDIA software components on the worker nodes. For installing the operator the official documentation has been followed: [Setup Nnvidia software](https://docs.nvidia.com/datacenter/cloud-native/kubernetes/install-k8s.html#step-4-setup-nvidia-software)
 -  Optional [Kubespray](https://github.com/kubernetes-sigs/kubespray) for creation a single node K8s test cluster.
 
 ### Prerequisities for a local development environment
@@ -159,4 +158,3 @@ After a successful installation:
 # Conclusions and Perspectives
 
 This document presented the 5GMETA Cloud Platfrom and its deployment approach.
-
