@@ -59,7 +59,7 @@ data:
                 bearer_only: false
                 realm: {{ .Values.global.oauth2.realm }}
                 introspection_endpoint_auth_method: client_secret_post
-                redirect_uri: "/api/v1/redirect"
+                redirect_uri: "/api/v1/ui"
             cors:
                 allow_origins: "*"
 

@@ -139,7 +139,7 @@ mongodb:
   fullnameOverride: mongodb
   architecture: "standalone"
   auth:
-    enabled: false
+    enabled: true
     usernames:
       - "5gmeta-platform"
     passwords:
@@ -147,6 +147,8 @@ mongodb:
     rootPassword: "5gmeta-platform"
     databases:
       - "license-database"
+  passwordUpdateJob:
+    enabled: true
 
 # 5GMETA Cloud Platform API Server
 apiserver-chart:

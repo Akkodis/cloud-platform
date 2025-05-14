@@ -10,12 +10,6 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "dev"
 
-#imagePullSecrets: []
-#imagePullSecrets:
-#  - name: regcred
-#nameOverride: ""
-#fullnameOverride: "cloudinstance-api"
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -46,12 +40,12 @@ service:
 
 ingress:
   enabled: false
-  className: "apisix"
+  className: "nginx"
   annotations:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: 5gmeta-platform.eu
+    - host: example.com
     - paths:
         - path: /api/v1/*
           pathType: Prefix
@@ -77,7 +71,7 @@ env:
     value: "5gmeta-platform"
   - name: DB_PASSWORD
     value: "5gmeta-platform"
-  - name: DB_IP
+  - name: DB_HOST
     value: "mysql-cluster.cloud-platform.svc.cluster.local"
   - name: DB_PORT
     value: "3306"
@@ -89,17 +83,18 @@ env:
     value: "8088"
   - name: AMQP_USER
     value: "5gmeta-platform"
-  - name: AMQP_PASSWORD
+  - name: AMQP_PORT
     value: "5gmeta-platform"
-  - name: database_url
-    value: "mongodb://mongodb.cloud-platform.svc.cluster.local"      
+  - name: MONGODB_HOST
+    value: "mongodb.cloud-platform.svc.cluster.local"
+  - name: MONGODB_USER
+    value: "5gmeta-platform"
+  - name: MONGODB_PASSWORD
+    value: "5gmeta-platform"
   - name: DISCOVERY_DB_NAME
     value: "discoverydb"
-  - name: license-db
+  - name: LICENSE_DB_NAME
     value: "license-database"
-  - name: APISERVER_URL
-    value: "http://apiserver.cloud-platform.svc.cluster.local:5000/api/v1"
-
 
 autoscaling:
   enabled: false
