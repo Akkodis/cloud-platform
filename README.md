@@ -23,10 +23,6 @@ The following requirements are needed to be able to deploy the platform:
 -  Optional [Terraform](https://developer.hashicorp.com/terraform/install?product_intent=terraform) used to deploy on Amazon EKS
 -  Optional [Kubespray](https://github.com/kubernetes-sigs/kubespray) for creation a single node K8s test cluster.
 
-### Prerequisities for a local development environment
-
--  [Virtualbox](https://www.virtualbox.org/wiki/Downloads) to provide a local virtualisation environment and as provider for Minikube
--  [Vagrant](https://developer.hashicorp.com/vagrant/install)
 
 ### Kubernetes Clusters
 
@@ -63,7 +59,7 @@ Since the cluster has a single node, the type of the Nginx Ingress controller se
 
 #### Production environments
 
-The deplopyment of the 5GMETA platform in prodction can be done using any:
+The deplopyment of the 5GMETA platform in production can be done using any:
 
 - [Kubernetes production cluster](https://kubernetes.io/docs/setup/production-environment/)
 - [Managed Kubernetes clusters](https://kubernetes.io/docs/setup/production-environment/turnkey-solutions/)
