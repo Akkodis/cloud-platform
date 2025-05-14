@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.4
 info:
   title: 5G-META Cloud Platform API Server
   description: "API to manage pipeline instances and instace types in different 5GMETA\
@@ -393,7 +393,7 @@ paths:
         "404":
           description: No services found
           content: {}
-      x-openapi-router-controller: openapi_server.controllers.southbound_services_controller
+      x-openapi-router-controller: openapi_server.controllers.mec_services_controller
   /mec:
     get:
       tags:
@@ -1520,8 +1520,8 @@ components:
             $ref: '#/components/schemas/GeolocationTileList'
       example:
         id: "1"
-        name: SanSebastian-MEC
-        organization: Vicomtech
+        name: MEC0
+        organization: Organisation
         lat: "43.2922071"
         lng: "-1.987018,17"
         resources:
@@ -1596,7 +1596,7 @@ components:
           description: Name of the exposed service in the MEC
         host:
           type: string
-          description: IP of the service
+          description: Hostname of the service
           format: hostname
         port:
           type: string

@@ -1,35 +1,26 @@
 import connexion
 import six
-
-from openapi_server import util
-from ksql import KSQLAPI
-
-from base64 import b64decode
 import json
-
 import os
-
-######### VICOM #########
 import sys
 import requests
-#import dataflow_catalogue_controller
-#########################
 import sqlalchemy as db
 import json
-
+from openapi_server import util
+from ksql import KSQLAPI
+from base64 import b64decode
 from openapi_server.controllers.dataflow_catalogue_controller import get_data_flows, increase_interested_parties_counter, decrease_interested_parties_counter
 from collections.abc import Iterable
 
-db_ip = os.environ["DB_IP"]
+db_ip = os.environ["DB_HOST"]
 db_port = os.environ["DB_PORT"]
 db_user = os.environ["DB_USER"]
 db_password = os.environ["DB_PASSWORD"]
-db_name = os.environ["DB_NAME"]
+db_name = os.environ["DATAFLOW_DB_NAME"]
 
 ###ONLY FOP PIPELINES###
 test_mode = os.environ.get("TEST_MODE", "false").lower() == "true"
 ########################
-
 engine = db.create_engine('mysql+pymysql://'+db_user+':'+db_password+'@'+db_ip+':'+db_port+'/'+db_name, isolation_level="READ UNCOMMITTED")
 # connection = engine.connect()
 metadata = db.MetaData()

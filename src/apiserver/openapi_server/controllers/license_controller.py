@@ -8,9 +8,13 @@ from openapi_server import util
 from pymongo import MongoClient
 import os
 
-host = os.environ['database_url']
-client = MongoClient(host, 27017) # Update if using remote MongoDB instance
-db = client['license-db']
+host     = os.environ['MONGODB_HOST']
+username = os.environ['MONGODB_USER']
+password = os.environ['MONGODB_PASSWORD']
+database = os.environ['LICENSE_DB_NAME']
+
+client = MongoClient(host, username=username, password=password, authSource=database) # Update if using remote MongoDB instance
+db = client[database]
 
 def delete_license(license_id):  # noqa: E501
     """Delete a specific license
@@ -68,7 +72,8 @@ def post_licenses(body):  # noqa: E501
     :rtype: License
     """
     if connexion.request.mimetype == "application/json":
-        body = License.from_dict( connexion.request.json())  # noqa: E501
+        
+        body = License.from_dict(body)  # noqa: E501
 
     if len(list(db['licenses'].find({'_id': body.id}))) == 0:
         db['licenses'].insert_one({'_id': body.id, 'license': str(body.license)})
@@ -91,7 +96,7 @@ def put_license(body, license_id):  # noqa: E501
     :rtype: License
     """
     if connexion.request.mimetype == "application/json":
-        body = LicenseData.from_dict(connexion.request.json())  # noqa: E501
+        body = License.from_dict(body)  # noqa: E501
     if len(list(db['licenses'].find({'_id': license_id}))) > 0:
         db['licenses'].update_one({'_id': license_id}, {'$set': {'_id': license_id, 'license': str(body)}})
         return "License update with success", 200

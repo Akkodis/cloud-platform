@@ -18,9 +18,9 @@ from types import SimpleNamespace
 
 config = {
   'user': 'root',
-  'password': os.getenv('db_root_password'),
-  'host': os.getenv("db_host"),
-  'database': os.getenv("db_name"),
+  'password': os.environ["DB_PASSWORD"],
+  'host': os.environ["DB_HOST"],
+  'database': os.environ["DISCOVERY_DB_NAME"],
   'raise_on_warnings': True
 }
 
@@ -535,7 +535,7 @@ def add_new_mecserver(name="", lat="", lng="", organization="", resources="", sb
       return mec_id
     
     
-def add_new_nbservice( mec_id, service_name, ip, port, description, props):
+def add_new_nbservice( mec_id, service_name, host, port, description, props):
     try:
         cnx = mysql.connector.connect(**config)
     except mysql.connector.Error as err:
@@ -549,9 +549,9 @@ def add_new_nbservice( mec_id, service_name, ip, port, description, props):
     else:  
         cursor = cnx.cursor()
         
-        statement = "INSERT INTO "+config['database']+".nb_services( mec_id, service_name, ip, port, description, props) VALUES ( %s, %s, %s, %s, %s, %s)"
+        statement = "INSERT INTO "+config['database']+".nb_services( mec_id, service_name, host, port, description, props) VALUES ( %s, %s, %s, %s, %s, %s)"
 
-        vals =  (  mec_id, service_name, ip, port, description, props )
+        vals =  (  mec_id, service_name, host, port, description, props )
         
         try:
           cursor.execute(statement, vals)
@@ -565,7 +565,7 @@ def add_new_nbservice( mec_id, service_name, ip, port, description, props):
         cnx.close()
         return jsonify({ 'service_id':service_id}), 200
 
-def modify_nbservice( mec_id, service_id, service_name, ip, port, description, props):
+def modify_nbservice( mec_id, service_id, service_name, host, port, description, props):
     try:
         cnx = mysql.connector.connect(**config)
     except mysql.connector.Error as err:
@@ -580,8 +580,8 @@ def modify_nbservice( mec_id, service_id, service_name, ip, port, description, p
     else:  
         cursor = cnx.cursor()
         
-        statement = "UPDATE "+config['database']+".nb_services SET service_name=%s, ip=%s, port=%s, description=%s, props=%s WHERE mec_id=%s AND service_id=%s"
-        vals =  (  service_name, ip, port, description, props, mec_id, service_id )
+        statement = "UPDATE "+config['database']+".nb_services SET service_name=%s, host=%s, port=%s, description=%s, props=%s WHERE mec_id=%s AND service_id=%s"
+        vals =  (  service_name, host, port, description, props, mec_id, service_id )
         
         try:
           cursor.execute(statement, vals)
