@@ -12,8 +12,8 @@ The following picture shows the architecurte of an AWS EKS cluster:
 ## Prerequisites
 
 The followng tools are needed:
-- Terraform
-- [Kubectl]((https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html))
+- [Terraform](https://developer.hashicorp.com/terraform)
+- [Kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
 - [Eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html).
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)  in the AWS Command Line Interface User Guide. After installing the AWS CLI, we recommend that you also configure it. For more information, see  [Quick configuration with  `aws configure`](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)  in the AWS Command Line Interface User
 - [ Helm](https://helm.sh/docs/intro/install/).
