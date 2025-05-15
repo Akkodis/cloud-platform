@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-from connexion import AsyncApp
+from connexion import FlaskApp
 from openapi_server import encoder
-
 import uvicorn
+from connexion.jsonifier import Jsonifier
+#app.json_provider_class = encoder.MyJSONProvider
 
-app = AsyncApp(__name__, specification_dir='./openapi/')
-app.json_provider_class = encoder.MyJSONProvider
-app.json = encoder.MyJSONProvider(app)
 
+app = FlaskApp(__name__, specification_dir='./openapi/')
 
 if __name__ == '__main__':
     

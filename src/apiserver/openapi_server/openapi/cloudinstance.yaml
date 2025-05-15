@@ -1,4 +1,4 @@
-openapi: 3.0.4
+openapi: 3.0.0
 info:
   title: 5G-META Cloud Platform API Server
   description: "API to manage pipeline instances and instace types in different 5GMETA\
@@ -23,6 +23,11 @@ tags:
   description: Operations about instance types
 - name: Instances
   description: Operations about pipeline instances
+- name: Southbound services
+  description: MEC services for sensors and devices
+- name: Northbound services
+  description: MEC services for the Cloud Platform
+
 paths:
   /mecs/{mec_id}/types:
     get:
@@ -1468,15 +1473,15 @@ components:
         sb_services:
         - service_name: message-broker
           description: Message Broker
-          host: "<host>"
+          host: "host"
           port: "5673"
         - service_name: video-broker
           description: Video Stream Broker
-          host: "<host>"
+          host: "host"
           port: "8443"
         - service_name: registration-api
           description: Registration API
-          host: "<host>"
+          host: "host"
           port: "12346"
         props: {}
         geolocation:
@@ -1532,15 +1537,15 @@ components:
         sb_services:
         - service_name: message-broker
           description: Message Broker
-          host: "<host>"
+          host: "host"
           port: "5673"
         - service_name: video-broker
           description: Video Stream Broker
-          host: "<host>"
+          host: "host"
           port: "8443"
         - service_name: registration-api
           description: Registration API
-          host: "<host>"
+          host: "host"
           port: "12346"
         props: "{}"
         geolocation:
@@ -1599,7 +1604,7 @@ components:
           description: Hostname of the service
           format: hostname
         port:
-          type: string
+          type: integer
           description: Port of the service
         description:
           type: string
@@ -1611,7 +1616,7 @@ components:
       example:
         service_name: message-broker
         description: Message Broker
-        host: "<host>"
+        host: "host"
         port: "5673"
         props: props
     NBService:
@@ -1630,7 +1635,7 @@ components:
           description: Hostname of the service
           format: hostname
         port:
-          type: string
+          type: integer
           description: Port of the service
         description:
           type: string
@@ -1642,7 +1647,7 @@ components:
       example:
         service_name: message-broker
         description: Message Broker
-        host: "<host>"
+        host: "host"
         port: "61616"
         props: "{}"
     GeolocationTileList:

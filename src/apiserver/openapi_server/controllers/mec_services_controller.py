@@ -149,8 +149,7 @@ def post_mec(body):  # noqa: E501
 
        #res = "Modified/Create MEC " + body.id + " org: " + body.organization
        #print("Res " + res + " " + str(body_json), flush=True)
-       body_json = body
-       mec_id = add_new_mecserver(body_json['name'], body_json['lat'], body_json['lng'], body_json['organization'], body_json['resources'], body_json['sb_services'], body_json['props'],body_json['geolocation'])
+       mec_id = add_new_mecserver(body['name'], body['lat'], body['lng'], body['organization'], body['resources'], body['sb_services'], body['props'],body['geolocation'])
 
         # for each time in the body add a tile to the MEC
 
@@ -222,8 +221,8 @@ def update_mec(body, tile):
     res = ""
     if connexion.request.mimetype == "application/json":
         body = MECInstance.from_dict(body)
-        res = "Modified/Create MEC " + body.id + " org: " + body.organization +  " adding tile " + tile
-        mec_id =int(body.id)
+        res = "Modified/Create MEC " + body['id'] + " org: " + body['organization'] +  " adding tile " + tile
+        mec_id =int(body['id'])
         print(res, flush=True)
 
         if( type(mec_id) != int or tile == None):
@@ -270,7 +269,7 @@ def add_nbservice_to_mec(mec_id, body=None):  # noqa: E501
         body = NBService.from_dict(body)  # noqa: E501z
         #body_json = connexion.request.get_json()
 
-    return add_new_nbservice( mec_id, body.service_name, body.ip, body.port, body.description, body.props)
+    return add_new_nbservice( mec_id, body['service_name'], body['host'], body['port'], body['description'], body['props'])
 
 
 def delete_nbservice_in_mec(mec_id, service_id):  # noqa: E501
@@ -379,7 +378,7 @@ def modify_nbservice_in_mec(mec_id, service_id, body=None):  # noqa: E501
         body = NBService.from_dict(body)  # noqa: E501z
         #body_json = connexion.request.get_json()
 
-    if( modify_nbservice( mec_id, service_id, body.service_name, body.ip, body.port, body.description, body.props) ):
+    if( modify_nbservice( mec_id, service_id, body.service_name, body.host, body.port, body.description, body.props) ):
         return jsonify({'service_id':service_id,"message":"updated"}), 200
     else:
         return jsonify({'message':"Not deleted"}), 400

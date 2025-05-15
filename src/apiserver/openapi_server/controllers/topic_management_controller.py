@@ -12,7 +12,7 @@ from base64 import b64decode
 from openapi_server.controllers.dataflow_catalogue_controller import get_data_flows, increase_interested_parties_counter, decrease_interested_parties_counter
 from collections.abc import Iterable
 
-db_ip = os.environ["DB_HOST"]
+db_host = os.environ["DB_HOST"]
 db_port = os.environ["DB_PORT"]
 db_user = os.environ["DB_USER"]
 db_password = os.environ["DB_PASSWORD"]
@@ -21,7 +21,7 @@ db_name = os.environ["DATAFLOW_DB_NAME"]
 ###ONLY FOP PIPELINES###
 test_mode = os.environ.get("TEST_MODE", "false").lower() == "true"
 ########################
-engine = db.create_engine('mysql+pymysql://'+db_user+':'+db_password+'@'+db_ip+':'+db_port+'/'+db_name, isolation_level="READ UNCOMMITTED")
+engine = db.create_engine('mysql+pymysql://'+db_user+':'+db_password+'@'+db_host+':'+db_port+'/'+db_name, isolation_level="READ UNCOMMITTED")
 # connection = engine.connect()
 metadata = db.MetaData()
 dataflows = db.Table('dataflows', metadata, autoload_with=engine)
@@ -472,8 +472,8 @@ def connector_exists(connector_name):
 def create_datatype_connector(data_type, instance_type, mec_id):
     activemq_username = "5gmeta-platform"
     activemq_password = "5gmeta-platform"
-    activemq_ip, activemq_port = get_messagebroker_info(mec_id) # type: ignore
-    activemq_url = "tcp://" + activemq_ip + ":" + activemq_port
+    activemq_host, activemq_port = get_messagebroker_info(mec_id) # type: ignore
+    activemq_url = "tcp://" + activemq_host + ":" + activemq_port
 
     if data_type == "event":
         connector_name = data_type + "-" + mec_id
@@ -518,7 +518,7 @@ def get_messagebroker_info(mec_id):
 
     for service in json_response:
         if service['service_name'] == 'message-broker':
-            messagebroker_ip = str(service['ip'])
+            messagebroker_host = str(service['host'])
             messagebroker_port = str(service['port'])
 
-            return messagebroker_ip, messagebroker_port
+            return messagebroker_host, messagebroker_port

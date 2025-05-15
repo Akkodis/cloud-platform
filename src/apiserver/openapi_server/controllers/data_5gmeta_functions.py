@@ -5,7 +5,7 @@ import os
 from openapi_server.models.mec_instance import MECInstance  # noqa: E501
 from openapi_server.models.mec_instance_list import MECInstanceList  # noqa: E501
 from openapi_server import util
-
+from openapi_server.models.base_model_ import Model
 from openapi_server.models.geolocation_tile import GeolocationTile
 from openapi_server.models.geolocation_tile_list import GeolocationTileList
 from openapi_server.models.sb_service import SBService
@@ -23,6 +23,16 @@ config = {
   'database': os.environ["DISCOVERY_DB_NAME"],
   'raise_on_warnings': True
 }
+
+
+
+
+include_nulls = False
+
+def default(o):
+    dikt =  dict((k, v) for k, v in o.items() if v)
+    return dikt
+
 
 
 ################ FUNCTIONS ####### 
@@ -158,9 +168,8 @@ def get_mecinstance_by_id(id):
       cursor.execute(query)#, (hire_start, hire_end)
       MEClist = []
       for (id, name, lat, lng, organization, resources, sb_services, props) in cursor:
-          
-          MEClist.append( MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props),      
-            get_geovalidity_by_mecid(id)))
+          meci = MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props),get_geovalidity_by_mecid(id))
+          MEClist.append( default(meci.to_dict()))
       cursor.close()
       return MEClist
   finally:
@@ -224,8 +233,9 @@ def get_mecinstances_locations():
       cursor.execute(query)#, (hire_start, hire_end)
       MEClist = []
       for (id, name, lat, lng, organization, resources, sb_services, props) in cursor:
-          
-          MEClist.append( MECInstance(id, name, lat, lng,get_geovalidity_by_mecid(id)))
+          meci = MECInstance(id, name, lat, lng, get_geovalidity_by_mecid(id))
+          meci = meci.to_dict()
+          MEClist.append( default(meci))
       cursor.close()
       return MEClist
   finally:
@@ -256,8 +266,10 @@ def get_mecinstances():
       MEClist = []
       for (id, name, lat, lng, organization, resources, sb_services, props) in cursor:
           
-          MEClist.append( MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props),      
-            get_geovalidity_by_mecid(id)))
+
+          mecinstance = MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props), get_geovalidity_by_mecid(id))
+          meci = mecinstance.to_dict()
+          MEClist.append(meci)
       cursor.close()
       return MEClist
   finally:
@@ -304,8 +316,8 @@ def get_mecinstances_by_tile(tile,write=0):
         cursor.execute(query)#, (hire_start, hire_end)
         for (id, name, lat, lng, organization, resources, sb_services, props) in cursor:
 
-            MEClist.append( MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props),      
-              get_geovalidity_by_mecid(id)))
+            meci =  MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props), get_geovalidity_by_mecid(id))
+            MEClist.append(meci.to_dict())
       #cursor.close()
       if len(MEClist)==0:
         statement = "SELECT mec.id, mec.name, mec.lat, mec.lng, mec.organization, mec.resources, mec.sb_services, mec.props " \
@@ -318,8 +330,8 @@ def get_mecinstances_by_tile(tile,write=0):
         print(statement)
         for (id, name, lat, lng, organization, resources, sb_services, props) in cursor:
           
-          MEClist.append( MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props),      
-            get_geovalidity_by_mecid(id)))
+          meci =  MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props), get_geovalidity_by_mecid(id))
+          MEClist.append(meci.to_dict())
           
         if len(MEClist)==0:
           statement = "SELECT mec.id, mec.name, mec.lat, mec.lng, mec.organization, mec.resources, mec.sb_services, mec.props " \
@@ -332,8 +344,9 @@ def get_mecinstances_by_tile(tile,write=0):
           print(statement)
           for (id, name, lat, lng, organization, resources, sb_services, props) in cursor:
         
-            MEClist.append( MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props),      
-              get_geovalidity_by_mecid(id)))
+            meci =  MECInstance(id, name, lat, lng,  organization, json.JSONDecoder().decode(resources), json.JSONDecoder().decode(sb_services), json.JSONDecoder().decode(props), get_geovalidity_by_mecid(id))
+            MEClist.append(meci.to_dict())
+
       cursor.close()
       return MEClist
   finally:

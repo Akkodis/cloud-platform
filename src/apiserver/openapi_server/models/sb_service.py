@@ -19,7 +19,7 @@ class SBService(Model):
 
         :param service_name: The service_name of this SBService.  # noqa: E501
         :type service_name: str
-        :param host: The ip of this SBService.  # noqa: E501
+        :param host: The host of this SBService.  # noqa: E501
         :type host: str
         :param port: The port of this SBService.  # noqa: E501
         :type port: int
@@ -91,18 +91,18 @@ class SBService(Model):
 
         HOST of the service  # noqa: E501
 
-        :return: The ip of this SBService.
+        :return: The host of this SBService.
         :rtype: str
         """
         return self._host
 
     @host.setter
-    def host(self, ip: str):
+    def host(self, host: str):
         """Sets the host of this SBService.
 
         HOST of the service  # noqa: E501
 
-        :param host: The ip of this SBService.
+        :param host: The host of this SBService.
         :type host: str
         """
         if host is None:

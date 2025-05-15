@@ -1,6 +1,4 @@
 connexion[swagger-ui,flask,uvicorn] 
-werkzeug
-swagger-ui-bundle
 python_dateutil
 setuptools
 flask-sqlalchemy
@@ -15,4 +13,3 @@ cryptography
 mysql-connector-python
 pymongo
 orjson
-Flask
