@@ -149,7 +149,7 @@ def post_mec(body):  # noqa: E501
 
        #res = "Modified/Create MEC " + body.id + " org: " + body.organization
        #print("Res " + res + " " + str(body_json), flush=True)
-       mec_id = add_new_mecserver(body['name'], body['lat'], body['lng'], body['organization'], body['resources'], body['sb_services'], body['props'],body['geolocation'])
+       mec_id = add_new_mecserver(body['name'], body['lat'], body['lng'], body['organization'], body['resources'], body['sb_services'], body['props'], body['geolocation'])
 
         # for each time in the body add a tile to the MEC
 
@@ -266,11 +266,11 @@ def add_nbservice_to_mec(mec_id, body=None):  # noqa: E501
         return jsonify({'message':"MEC ID NOT EXISTS"}), 404
 
     if connexion.request.mimetype == "application/json":
-        body = NBService.from_dict(body)  # noqa: E501z
+        #body = NBService.from_dict(body)  # noqa: E501z
         #body_json = connexion.request.get_json()
+        print(body)
 
     return add_new_nbservice( mec_id, body['service_name'], body['host'], body['port'], body['description'], body['props'])
-
 
 def delete_nbservice_in_mec(mec_id, service_id):  # noqa: E501
     """delete_nbservice_in_mec
