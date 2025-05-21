@@ -150,6 +150,11 @@ After a successful installation:
 
 - Djibrilla Amadou Kountche
 
+## TODO
+
+1. Ensure that this README contains the relevant information from the follwoing project:
+  - https://github.com/5gmeta/platform-config
+2. Re-draw the diagrams
 
 # Conclusions and Perspectives
 
