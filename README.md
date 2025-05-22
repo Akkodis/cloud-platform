@@ -137,7 +137,7 @@ After a successful installation:
 - The 5GMTA realm must be imported in Keycloak. This realm can be found in cloud-platform/security.
 - The Grafana Dashboard must be imported in Grafana
 
-# Knwon Issues
+# Post-installation
 
 - After the deployment of the Cloud Platform, the Apisx container may crash because of the mismatch between the Oauth2.0 client secret and the client secret in the 5GMETA realm. Make sure to:
 
