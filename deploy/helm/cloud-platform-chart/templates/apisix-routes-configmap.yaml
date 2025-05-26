@@ -32,6 +32,26 @@ data:
         priority: 201
 
       -
+        uri: /ksql/*
+        upstream:
+            nodes:
+                    "cloud-platform-cp-ksql-server.{{ .Release.Namespace }}.svc.cluster.local:8088": 1
+            type: roundrobin
+        priority: 201
+        plugins:
+          proxy-rewrite:
+            regex_uri : ["^/ksql/(.*)", "/$1"]
+      -
+        uri: /registry/*
+        upstream:
+            nodes:
+                    "cloud-platform-cp-schema-registry.{{ .Release.Namespace }}.svc.cluster.local:8081": 1
+            type: roundrobin
+        priority: 201
+        plugins:
+          proxy-rewrite:
+            regex_uri : ["^/registry/(.*)", "/$1"]
+      -
         uri: /kafka-ui/*
         upstream:
             nodes:
