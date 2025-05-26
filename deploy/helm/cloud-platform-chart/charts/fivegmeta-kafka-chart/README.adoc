@@ -1,38 +1,17 @@
-= Confluent Platform Helm Charts
-:icons: font
-:toc: auto
-:toc-placement: macro
-:toc-position: auto
-:toc-title: Table of content
-:toclevels: 3
-:idprefix:
-:idseparator: -
-:sectanchors:
-:icons: font
-:source-highlighter: rouge
-:experimental:
+# 5GMETA Cloud Platform Kafka distribution Helm Charts
 
 
-toc::[]
-
-5GMETA Kafka Broker is based on  Confluent Platform and is deployed using https://github.com/confluentinc/cp-helm-charts[Confluent Platform Helm Charts].
+5GMETA Cloud Platform Kafka distribution is based on  https://github.com/confluentinc/cp-helm-charts[Confluent Platform Helm Charts].
 This documentation is an adapted version of the Confluent Platform README. 
 
-== Installation
+## Installation
 
-[source,bash]
-.Installing helm chart
-----
-helm repo add confluentinc https://confluentinc.github.io/cp-helm-charts/   #<1>
-helm repo update    #<2>
-helm install confluentinc/cp-helm-charts --name my-confluent --version 0.6.0    #<3>
-----
-<1> Add `confluentinc` helm charts repo
-<2> Update repo information 
-<3> Install Confluent Platform with release name «my-confluent» and version `0.6.0` 
+```bash
+cd cloud-platform/deploy/helm/cloud-platform-chart/charts
+helm install fivegmeta-kafka-chart --name kafka -n cloud-platform
+```
 
-
-== Documentation
+## Components Documentation
 
 https://helm.sh/[Helm] is an open-source packaging tool that helps you install applications and services on Kubernetes.
 Helm uses a packaging format called charts.
@@ -56,7 +35,7 @@ You must have a Kubernetes cluster that has Helm configured.
 
 These Helm charts have been tested with the following software versions:
 
-* https://kubernetes.io/[Kubernetes] 1.9.2+
+* https://kubernetes.io/[Kubernetes] 1.31.0
 * https://helm.sh/[Helm] 3+
 * https://hub.docker.com/u/confluentinc/[Confluent Platform Docker Images]
 
@@ -68,24 +47,6 @@ For local Kubernetes installation with Minikube, see <<create-local-minikube>>.
 Follow the directions to https://docs.helm.sh/using_helm/#quickstart-guide[install and deploy Helm] to the Kubernetes cluster.
 
 View a list of all deployed releases in the local installation.
-
-[source,sh]
-----
-helm init
-helm repo update
-helm list
-----
-
-
-[source,sh]
-----
-kubectl delete --namespace kube-system svc tiller-deploy
-kubectl delete --namespace kube-system deploy tiller-deploy
-kubectl create serviceaccount --namespace kube-system tiller
-kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
-helm init --service-account tiller --upgrade
-----
 
 === Persistence
 
@@ -243,12 +204,8 @@ kubectl delete pvc --selector=release=<release name>
 
 
 
-== Thanks
+== Credits
 
-Huge thanks to:
+This repository is based on :
 
-* https://github.com/kubernetes/charts/tree/master/incubator/kafka[Kafka helm chart]
-* https://github.com/kubernetes/charts/tree/master/incubator/zookeeper[ZooKeeper helm chart]
-* https://github.com/kubernetes/charts/tree/master/incubator/schema-registry[Schema Registry helm chart]
-* https://github.com/Yolean/kubernetes-kafka[kubernetes-kafka]
-* https://github.com/solsson/dockerfiles[docker-kafka]
+* https://github.com/confluentinc/cp-helm-charts[Confluent Platform Helm Charts]
