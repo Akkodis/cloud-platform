@@ -34,6 +34,7 @@ apisix:
   dashboard:
     enabled: false
   dataPlane:
+    resourcePreset: "xlarge"
     service:
       type: ClusterIP
     ingress:
@@ -68,6 +69,14 @@ kube-prometheus-stack:
   fullnameOverride: kube-prometheus
   grafana:
     fullnameOverride: grafana
+    adminUser: admin
+    adminPassword: Grafana-Admin-2025-2026
+    dashboards:
+      default:
+        msql-dashboard:
+          gnetId: 14031
+          revision: 5
+          datasource: Prometheus
     grafana.ini:
       server:
         domain: *globalhostname
