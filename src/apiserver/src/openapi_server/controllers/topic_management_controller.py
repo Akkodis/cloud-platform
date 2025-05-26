@@ -29,7 +29,11 @@ topics = db.Table('topics', metadata, autoload_with=engine)
 
 platform_address = os.environ["KAFKA_IP"]
 plaform_port = os.environ["KAFKA_PORT"]
-client = KSQLAPI("http://"+platform_address+":"+plaform_port)
+
+#TODO pass the serive name using environment variables.
+client = KSQLAPI(f'http://cloud-platform-cp-ksql-server.cloud-platform.svc.cluster.local:8088')
+#TODO update this
+discovery_url = "http://apiserver.cloud-platform.svc.cluster.local:5000/api/v1"
 
 def create_topic(instance_type, data_type, data_sub_type=None, data_format=None, country=None, quadkey=None, source_id=None, source_type=None, license_type=None, license_geo_limit=None, extra_parameters=None):  # noqa: E501
     """catalogue a Kafka topic for the user and returns the topic
@@ -65,7 +69,7 @@ def create_topic(instance_type, data_type, data_sub_type=None, data_format=None,
 
     ######### VICOM #########
 
-    if(not test_mode): 
+    if not test_mode:
         try:
             mec_ids = get_mec_ids(quadkey) # Get MEC IDs from discovery
         except Exception as err:
@@ -170,17 +174,13 @@ def create_topic(instance_type, data_type, data_sub_type=None, data_format=None,
             return "Invalid dataType or instance_type.", 405
     else: # DOWNLOAD DATAFLOW
         topic_name = data_type
-
         inc = 0
-
-        if(test_mode):
+        if test_mode:
             mec_ids_string = ""
-
         dest_stream = x_user_id.upper() + '_' + str(len(topics_by_user())+1000+inc) + '_' + 'EVENT' + mec_ids_string
         while stream_exists(dest_stream):
             inc += 1
             dest_stream = x_user_id.upper() + '_' + str(len(topics_by_user())+1000+inc) + '_' + 'EVENT' + mec_ids_string
-
         try:
             create_stream_from_topic2(dest_stream, dest_stream) # Create a stream for the event topic created for the user
         except Exception as err:
@@ -191,7 +191,6 @@ def create_topic(instance_type, data_type, data_sub_type=None, data_format=None,
             query = 'CREATE STREAM "' + dest_stream + '_2' + '" \n' \
                 "WITH (kafka_topic='" + topic_name + "') \n" \
                 'AS SELECT * FROM "' + dest_stream + '" '
-
             try:
                 client.ksql(query)
             except Exception as err:
@@ -436,7 +435,7 @@ def create_stream_from_topic2(stream_name, topic_name):
     client.ksql( create_stream )
 
 def stream_exists(stream_name):
-    if(stream_name in streams_list()):    
+    if stream_name in streams_list():
         return True
     return False
 
@@ -455,7 +454,7 @@ def topics_list():
     return list(map(lambda topic: topic['name'], topics))
 
 def topic_exists(topic_name):
-    if(topic_name in topics_list()):    
+    if topic_name in topics_list():
         return True
     return False
 
@@ -465,15 +464,15 @@ def connectors_list():
     return list(map(lambda connector: connector['name'], connectors))
 
 def connector_exists(connector_name):
-    if(connector_name in connectors_list()):    
+    if connector_name in connectors_list():
         return True
     return False
 
 def create_datatype_connector(data_type, instance_type, mec_id):
-    activemq_username = "5gmeta-platform"
-    activemq_password = "5gmeta-platform"
+    activemq_username = os.environ['AMQP_USER']
+    activemq_password = os.environ['AMQP_PORT']
     activemq_host, activemq_port = get_messagebroker_info(mec_id) # type: ignore
-    activemq_url = "tcp://" + activemq_host + ":" + activemq_port
+    activemq_url = f'tcp://{activemq_host}:{activemq_port}'
 
     if data_type == "event":
         connector_name = data_type + "-" + mec_id
@@ -501,8 +500,8 @@ def create_datatype_connector(data_type, instance_type, mec_id):
 
     client.ksql(create_connector)
 
-#discovery_url = "https://5gmeta-platform.eu/discovery-api"
-discovery_url = "http://discovery-api.cloud-platform.svc.cluster.local:8080/discovery-api"
+
+
 
 def get_mec_ids(quadkey):
     r = requests.get(discovery_url + "/mec/tile/" + quadkey)

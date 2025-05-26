@@ -1,5 +1,8 @@
 import connexion
 import six
+import sqlalchemy as db
+import json
+import os
 
 from openapi_server.models.data_flow import DataFlow  # noqa: E501
 from openapi_server.models.data_info import DataInfo
@@ -7,42 +10,30 @@ from openapi_server.models.data_type_info import DataTypeInfo
 from openapi_server.models.data_source_info import DataSourceInfo
 from openapi_server.models.license_info import LicenseInfo
 from openapi_server.models.source_location_info import SourceLocationInfo
-
 from openapi_server import util
+from sqlalchemy import URL
 
-import sqlalchemy as db
-import json
 
-import os
-
-db_host = os.environ["DB_HOST"]
-db_port = os.environ["DB_PORT"]
-db_user = os.environ["DB_USER"]
-db_password = os.environ["DB_PASSWORD"]
-db_name = os.environ["DATAFLOW_DB_NAME"]
-
-engine = db.create_engine('mysql+pymysql://'+db_user+':'+db_password+'@'+db_host+':'+db_port+'/'+db_name, isolation_level="READ UNCOMMITTED")
+engine = db.create_engine(URL.create("mysql+pymysql", username=os.environ["DB_USER"], password=os.environ["DB_PASSWORD"], host=os.environ["DB_HOST"], port=os.environ["DB_PORT"], database=os.environ["DATAFLOW_DB_NAME"]), isolation_level="READ UNCOMMITTED")
 # connection = engine.connect()
 metadata = db.MetaData()
 dataflows = db.Table('dataflows', metadata, autoload_with=engine)
 
-def increase_interested_parties_counter(dataflowId):
+def change_inserted_number(dataflow_id, value: int):
     connection_local = engine.connect()
 
-    query = db.select([dataflows.columns.counter]).where(dataflows.columns.dataflowId == dataflowId)
-    c = connection_local.execute(query).fetchone()["counter"] + 1
+    query = db.select([dataflows.columns.counter]).where([dataflows.columns.dataflowId] == dataflow_id)
+    c = connection_local.execute(query).fetchone()["counter"] + value
 
-    query = db.update(dataflows).values({"counter": c}).where(dataflows.columns.dataflowId == dataflowId)
+    query = db.update(dataflows).values({"counter": c}).where([dataflows.columns.dataflowId] == dataflow_id)
     connection_local.execute(query)
 
-def decrease_interested_parties_counter(dataflowId):
-    connection_local = engine.connect()
+def increase_interested_parties_counter(dataflow_id):
+    change_inserted_number(dataflow_id, 1)
 
-    query = db.select([dataflows.columns.counter]).where(dataflows.columns.dataflowId == dataflowId)
-    c = connection_local.execute(query).fetchone()["counter"] - 1
+def decrease_interested_parties_counter(dataflow_id):
+    change_inserted_number(dataflow_id, -1)
 
-    query = db.update(dataflows).values({"counter": c}).where(dataflows.columns.dataflowId == dataflowId)
-    connection_local.execute(query)
 
 def get_data_flows(data_type, data_sub_type=None, data_format=None, country=None, quadkey=None, source_id=None, source_type=None, license_type=None, license_geo_limit=None, extra_parameters=None):  # noqa: E501
     """Returns the list of ids of DataFlows that match the query
@@ -161,9 +152,9 @@ def get_metadata(data_flow_id):  # noqa: E501
     """
     connection_local = engine.connect()
 
-    query = db.select([dataflows]).where(dataflows.columns.dataflowId == data_flow_id)
+    query = db.select(dataflows).where([dataflows.columns.dataflowId] == data_flow_id)
     result = connection_local.execute(query).fetchone()
-    if (result is None):
+    if result is None:
         return {
             "error": "Item not found"
         }, 404
@@ -178,10 +169,10 @@ def get_metadata(data_flow_id):  # noqa: E501
 def get_datatypes(quadkey):
     connection_local = engine.connect()
 
-    query = db.select([dataflows.columns.dataType]).distinct().where(dataflows.columns.locationQuadkey.startswith(quadkey))
+    query = db.select(dataflows.columns.dataType).distinct().where(dataflows.columns.locationQuadkey.startswith(quadkey))
     result = connection_local.execute(query).fetchall()
 
-    if (result is None):
+    if result is None:
         return []
     
     l = []
@@ -203,7 +194,7 @@ def get_possible_value(data_type):  # noqa: E501
 
     result = {}
     for field in dataflows.columns:
-        if(field in [dataflows.columns.timeLastUpdate, dataflows.columns.timeRegistration, dataflows.columns.dataflowId, dataflows.columns.dataType]):
+        if field in [dataflows.columns.timeLastUpdate, dataflows.columns.timeRegistration, dataflows.columns.dataflowId, dataflows.columns.dataType]:
             continue
         query = db.sql.select([field]).distinct().where(dataflows.columns.dataType == data_type)
         r = connection_local.execute(query).fetchall()
