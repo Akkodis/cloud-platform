@@ -10,7 +10,7 @@ data:
       CREATE DATABASE dataflowdb;
       CREATE DATABASE discoverydb;
       CREATE USER IF NOT EXISTS '{{ .Values.global.cloudplatform.username }}'@'%' IDENTIFIED BY '{{ .Values.global.cloudplatform.password }}';
-      GRANT ALL ON discoverydb.* TO '5gmeta-platform'@'%';
+      GRANT ALL ON discoverydb.* TO '{{ .Values.global.cloudplatform.username }}'@'%';
       GRANT ALL ON dataflowdb.* TO '{{ .Values.global.cloudplatform.username }}'@'%';
       FLUSH PRIVILEGES;
       USE discoverydb;
