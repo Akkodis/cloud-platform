@@ -7,7 +7,7 @@ dependencies:
   version: 72.2.0
 - name: mysql
   repository: https://charts.bitnami.com/bitnami
-  version: 12.3.5
+  version: 13.0.0
 - name: apisix
   repository: https://charts.bitnami.com/bitnami
   version: 3.7.0
@@ -17,5 +17,5 @@ dependencies:
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
   version: 16.5.5
-digest: sha256:f965adc2f5a859d38c054fde2279a16443c6cb7237196b8759d099e6f7f7a64c
-generated: "2025-05-09T12:19:34.955402158+02:00"
+digest: sha256:0534153806080a05b3183e570e6ffdd994ea5cc6bb824db1fef08ce73a7fb795
+generated: "2025-06-26T12:11:02.553007524+02:00"
