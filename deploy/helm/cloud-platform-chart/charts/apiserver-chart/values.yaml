@@ -68,9 +68,9 @@ resources: {}
 
 env:
   - name: DB_USER
-    value: "5gmeta-platform"
+    value: "{{ .Values.global.cloudplatform.username }}"
   - name: DB_PASSWORD
-    value: "5gmeta-platform"
+    value: "{{ .Values.global.cloudplatform.password }}"
   - name: DB_HOST
     value: "mysql-cluster.cloud-platform.svc.cluster.local"
   - name: DB_PORT
@@ -82,15 +82,15 @@ env:
   - name: KAFKA_PORT
     value: "8088"
   - name: AMQP_USER
-    value: "5gmeta-platform"
+    value: "{{ .Values.global.cloudplatform.amqp.username }}"
   - name: AMQP_PORT
-    value: "5gmeta-platform"
+    value: "{{ .Values.global.cloudplatform.amqp.password }}"
   - name: MONGODB_HOST
     value: "mongodb.cloud-platform.svc.cluster.local"
   - name: MONGODB_USER
-    value: "5gmeta-platform"
+    value: "{{ .Values.global.cloudplatform.mongodb.username }}"
   - name: MONGODB_PASSWORD
-    value: "5gmeta-platform"
+    value: "{{ .Values.global.cloudplatform.mongodb.password }}"
   - name: DISCOVERY_DB_NAME
     value: "discoverydb"
   - name: LICENSE_DB_NAME
