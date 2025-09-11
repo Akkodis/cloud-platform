@@ -14,7 +14,6 @@ data:
                     "cloud-platform-keycloak.{{ .Release.Namespace }}.svc.cluster.local:80": 1
             type: roundrobin
         priority: 200
-
       -
         uri: /*
         upstream:
@@ -22,7 +21,6 @@ data:
                     "superset.superset.svc.cluster.local:8088": 1
             type: roundrobin
         priority: 201
-
       -
         uri: /grafana/*
         upstream:
@@ -30,7 +28,6 @@ data:
                     "grafana.{{ .Release.Namespace }}.svc.cluster.local:80": 1
             type: roundrobin
         priority: 201
-
       -
         uri: /ksql/*
         upstream:
@@ -58,7 +55,6 @@ data:
                     "kafka-ui.{{ .Release.Namespace }}.svc.cluster.local:80": 1
             type: roundrobin
         priority: 201
-
       -
         uri: /api/v1/*
         upstream:
@@ -78,13 +74,12 @@ data:
                 scope: "openid profile"
                 bearer_only: false
                 use_jwks: true
-                set_userinfo_header: true	
+                set_userinfo_header: true
                 realm: {{ .Values.global.oauth2.realm }}
                 introspection_endpoint_auth_method: client_secret_post
                 redirect_uri: "/api/v1/ui/"
             cors:
                 allow_origins: "*"
-
       -
         uri: /user-business-info/*
         upstream:
@@ -108,9 +103,6 @@ data:
                 redirect_uri: "/discovery-api/redirect"
             cors:
                 allow_origins: "*"
-
-
-
       -
         uri: /prometheus/*
         upstream:
