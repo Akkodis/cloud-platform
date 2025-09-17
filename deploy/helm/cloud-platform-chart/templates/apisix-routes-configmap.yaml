@@ -77,7 +77,7 @@ data:
                 set_userinfo_header: true
                 realm: {{ .Values.global.oauth2.realm }}
                 introspection_endpoint_auth_method: client_secret_post
-                redirect_uri: "/api/v1/ui/"
+                redirect_uri: "/api/v1/"
             cors:
                 allow_origins: "*"
       -
@@ -100,7 +100,7 @@ data:
                 bearer_only: false
                 realm: {{ .Values.global.oauth2.realm }}
                 introspection_endpoint_auth_method: client_secret_post
-                redirect_uri: "/discovery-api/redirect"
+                redirect_uri: "/user-business-info/redirect"
             cors:
                 allow_origins: "*"
       -
