@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ferretdb-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: ferretdb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP

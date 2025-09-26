@@ -11,7 +11,7 @@ data:
         uri: /identity/*
         upstream:
             nodes:
-                    "cloud-platform-keycloak.{{ .Release.Namespace }}.svc.cluster.local:80": 1
+                    "keycloak-service.{{ .Release.Namespace }}.svc.cluster.local:8080": 1
             type: roundrobin
         priority: 200
       -

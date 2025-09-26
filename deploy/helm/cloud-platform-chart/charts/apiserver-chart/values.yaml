@@ -68,11 +68,17 @@ resources: {}
 
 env:
   - name: DB_USER
-    value: "{{ .Values.global.cloudplatform.username }}"
+    valueFrom:
+      secretKeyRef:
+        name: mariadb
+        key: username
   - name: DB_PASSWORD
-    value: "{{ .Values.global.cloudplatform.password }}"
+    valueFrom:
+      secretKeyRef:
+        name: mariadb
+        key: password
   - name: DB_HOST
-    value: "mysql-cluster.cloud-platform.svc.cluster.local"
+    value: "mariadb-cluster.cloud-platform.svc.cluster.local"
   - name: DB_PORT
     value: "3306"
   - name: DATAFLOW_DB_NAME
@@ -82,19 +88,34 @@ env:
   - name: KAFKA_PORT
     value: "8088"
   - name: AMQP_USER
-    value: "{{ .Values.global.cloudplatform.amqp.username }}"
-  - name: AMQP_PORT
-    value: "{{ .Values.global.cloudplatform.amqp.password }}"
+    valueFrom:
+      secretKeyRef:
+        name: amqp-broker
+        key: username
+  - name: AMQP_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: amqp-broker
+        key: password
   - name: MONGODB_HOST
-    value: "mongodb.cloud-platform.svc.cluster.local"
+    value: "ferretdb-service.cloud-platform.svc.cluster.local"
   - name: MONGODB_USER
-    value: "{{ .Values.global.cloudplatform.mongodb.username }}"
+    valueFrom:
+      secretKeyRef:
+        name: ferretdb
+        key: username
   - name: MONGODB_PASSWORD
-    value: "{{ .Values.global.cloudplatform.mongodb.password }}"
+    valueFrom:
+      secretKeyRef:
+        name: ferretdb
+        key: password
   - name: DISCOVERY_DB_NAME
     value: "discoverydb"
   - name: LICENSE_DB_NAME
-    value: "license-database"
+    valueFrom:
+      secretKeyRef:
+        name: ferretdb
+        key: database
 
 autoscaling:
   enabled: false

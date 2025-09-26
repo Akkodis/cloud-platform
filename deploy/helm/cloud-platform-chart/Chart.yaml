@@ -28,27 +28,25 @@ maintainers:
 
 dependencies:
 
-- name: cert-manager
-  repository: https://charts.jetstack.io
-  version: v1.18.2
-
 - name: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
   version: 77.5.0
     
-- name: mysql
-  repository: https://charts.bitnami.com/bitnami
-  version: 14.0.3
+- name: mariadb-operator
+  repository: https://helm.mariadb.com/mariadb-operator
+  version: 25.8.4
+
+- name: mariadb-cluster
+  repository: https://helm.mariadb.com/mariadb-operator
+  version: 25.8.4
 
 - name: apisix
-  repository: https://charts.bitnami.com/bitnami
-  version: 6.0.0
+  repository: https://charts.apiseven.com
+  version: 2.11.6
 
-- name: keycloak
-  repository: https://charts.bitnami.com/bitnami  
-  version: 25.2.0
 
-- name: mongodb
-  repository: https://charts.bitnami.com/bitnami
-  version: 16.5.45
+- name: cloudnative-pg
+  repository: https://cloudnative-pg.github.io/charts
+  version: 0.26.0
+
 

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ferretdb
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ferretdb
+  template:
+    metadata:
+      labels:
+        app: ferretdb
+    spec:
+      containers:
+        - name: ferretdb
+          image: ghcr.io/ferretdb/ferretdb:2.1.0
+          ports:
+            - containerPort: 27017
+          env:
+            - name: FERRETDB_POSTGRESQL_URL
+              value: 'postgresql://{{ .Values.global.ferretdb.username }}:{{ .Values.global.ferretdb.password }}@ferretdb-cluster-rw.cloud-platform.svc.cluster.local:5432/{{ .Values.global.ferretdb.database }}'
+
+

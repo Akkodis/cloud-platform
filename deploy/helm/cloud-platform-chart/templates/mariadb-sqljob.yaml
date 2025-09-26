@@ -1,18 +1,19 @@
-apiVersion: v1
-kind: ConfigMap
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: SqlJob
 metadata:
-  name: init-mysql-databases
-  namespace: {{ .Release.namespace }}
+  name: init-mariadb-databases
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/managed-by: Helm
-data:
-    createandconfiguredbs.sql: |
-      CREATE DATABASE dataflowdb;
-      CREATE DATABASE discoverydb;
-      CREATE USER IF NOT EXISTS '{{ .Values.global.cloudplatform.username }}'@'%' IDENTIFIED BY '{{ .Values.global.cloudplatform.password }}';
-      GRANT ALL ON discoverydb.* TO '{{ .Values.global.cloudplatform.username }}'@'%';
-      GRANT ALL ON dataflowdb.* TO '{{ .Values.global.cloudplatform.username }}'@'%';
-      FLUSH PRIVILEGES;
+spec:
+    args: ["sleep 120"]
+    mariaDbRef:
+      name: mariadb-cluster
+    username: {{ .Values.global.cloudplatform.username }}
+    passwordSecretKeyRef:
+      name: mariadb
+      key: password
+    sql: |
       USE discoverydb;
       SHOW TABLES;
       -- SELECT * FROM pipeline;

@@ -531,7 +531,7 @@ def add_new_mecserver(name="", lat="", lng="", organization="", resources="", sb
       
       statement = "INSERT INTO "+config['database']+".MECservers( name, lat, lng, organization, resources, sb_services, props) VALUES ( %s, %s, %s, %s, %s, %s, %s)"
 
-      vals =  (  name, lat, lng, organization, json.JSONEncoder().encode(resources), json.JSONEncoder().encode(sb_services), json.JSONEncoder().encode(props) )
+      vals =  ( name, lat, lng, organization, json.JSONEncoder().encode(resources), json.JSONEncoder().encode(sb_services), json.JSONEncoder().encode(props) )
       # "DELETE FROM "+config['database']+".`MEC-tile` WHERE mec_id = '%s' and tile = '%s'" % mec_id, tile)
       
       cursor.execute(statement, vals) 

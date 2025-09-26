@@ -9,6 +9,20 @@ global:
       password: &globalpassword "5gmeta-platform"
       dbrootpassword: &globaldbrootpassword "5gmeta-platform"
 
+   broker:
+     username: "5gmeta-platform"
+     password: "5gmeta-platform"
+
+   keycloak:
+     postgresql:
+        username: "5gmeta-platform"
+        password: "5gmeta-platform"
+
+   ferretdb:
+     username: "5gmeta-platform"
+     password: "5gmeta-platform"
+     database: "license-database"
+
    oauth2:
      issuer: &oauthissuer "5gmeta-platform.eu/identity"
      realm: 5gmeta
@@ -16,33 +30,22 @@ global:
        client: apisix
        secret: T7uuYjxAaxsUMoVClujNCksyAEh0rgW7
 
-cert-manager:
-  namespace: cert-manager
-  fullnameOverride: cert-manager
-  crds:
-    enabled: false
-  startupapicheck:
-    timeout: 30m
-
 apisix:
-  controlPlane:
-    enabled: false
-  ingressController:
-    enabled: false
-  etcd:
-    enabled: false
-  dashboard:
-    enabled: false
-  dataPlane:
-    resourcePreset: "xlarge"
+    fullnameOverride: "apisix"
+    control:
+      enabled: false
+    etcd:
+      enabled: false
     service:
-      type: ClusterIP
+      type: NodePort
     ingress:
       enabled: true
-      hostname: *globalhostname
-      ingressClassName: "nginx"
+      hosts:
+        - host: *globalhostname
+          paths:
+            - "/"
+      className: "nginx"
       pathType: Prefix
-      tls: true
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/enable-cors: "true"
@@ -52,18 +55,24 @@ apisix:
         nginx.ingress.kubernetes.io/proxy-busy-buffers-size: 256k
         cert-manager.io/issuer: *globalissuer
 
-    extraConfig:
-      deployment:
-        role_data_plane:
-          config_provider: yaml
     extraVolumes:
       - name: routes
         configMap:
           name: apisix-routes
+
     extraVolumeMounts:
       - name: routes
         mountPath: /usr/local/apisix/conf/apisix.yaml
         subPath: apisix.yaml
+
+    apisix: 
+      deployment:
+        mode: "standalone"
+        role: data_plane
+        role_data_plane:
+          config_provider: yaml
+      admin:
+        enabled: false
 
 kube-prometheus-stack:
   fullnameOverride: kube-prometheus
@@ -84,80 +93,64 @@ kube-prometheus-stack:
         serve_from_sub_path: true
 
 
-# Mysql used to store the dataflows
-mysql:
-  fullnameOverride: mysql-cluster
-  architecture: standalone
+# MariaDB used to store the dataflows
+mariadb-operator:
+  fullnameOverride: "mariadb-operator"
 
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      labels:
-        release: cloud-platform
-      namespace: cloud-platform
-  primary:
-    service:
-      nodePorts:
-        mysql: 30057
-      type: NodePort
+mariadb-cluster:
+  fullnameOverride: "mariadb-cluster"
+  mariadb:
+    galera:
+      enabled: false
+    replicas: 1
+    rootPasswordSecretKeyRef:
+      name: mariadb
+      key: root-password
+      generate: true
+    image: mariadb:lts-ubi9
+    storage:
+      size: 10Gi
 
-  auth:
-    createDatabase: false
-    password: *globalusername
-    rootPassword: *globaldbrootpassword
-    username: *globalpassword
+  databases:
+    - name: dataflowdb
+      characterSet: utf8
+      collate: utf8_general_ci
+      cleanupPolicy: Delete
+      requeueInterval: 10h
 
-  initdbScriptsConfigMap: "init-mysql-databases"
+    - name: discoverydb
+      characterSet: utf8
+      collate: utf8_general_ci
+      cleanupPolicy: Delete
+      requeueInterval: 10h
 
+  users:
+    - name: *globalusername
+      passwordSecretKeyRef:
+        name: mariadb
+        key: password
+      host: "%"
+      cleanupPolicy: Delete
+      requeueInterval: 10h
+      retryInterval: 30s
 
-# Keycloak as Identity provider
-keycloak:
-  auth:
-    adminUser: 5gmeta-identity-admin
-    adminPassword: changeme
+  grants:
+    - name: *globalusername
+      privileges:
+        - "ALL PRIVILEGES"
+      database: "*"
+      table: "*"
+      username: *globalusername
+      grantOption: true
+      host: "%"
+      cleanupPolicy: Delete
+      requeueInterval: 10h
+      retryInterval: 30s
 
-  extraEnvVars:
-    - name: KC_HTTP_RELATIVE_PATH
-      value: "identity"
-    - name: KC_HTTP_ENABLED
-      value: "true"
-    - name: KC_PROXY
-      value: "edge"
-    - name: KC_HOSTNAME
-      value: "https://5gmeta-platform.eu/identity"
-    - name: KC_HOSTNAME_PATH
-      value: "identity"
-  volumes:
-    - /tmp/security/keyclaok:/opt/bitnami/keycloak/data/import
-  livenessProbe:
-    enabled: false
-
-  readinessProbe:
-    enabled: false
-
-  postgresql:
-    enabled: true
-    auth:
-      username: keycloak-db-admin
-      password: keycloak-db-password
-
-
-# Mongodb used to store the licenses 
-mongodb:
-  fullnameOverride: mongodb
-  architecture: "standalone"
-  auth:
-    enabled: true
-    usernames:
-      - "5gmeta-platform"
-    passwords:
-      - "5gmeta-platform"
-    rootPassword: "5gmeta-platform"
-    databases:
-      - "license-database"
-  passwordUpdateJob:
-    enabled: true
+cloudnative-pg:
+  fullnameOverride: "cloudnative-pg"
+  crds:
+    create: false
 
 # 5GMETA Cloud Platform API Server
 apiserver-chart:

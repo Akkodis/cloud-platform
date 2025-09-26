@@ -265,10 +265,10 @@ def add_nbservice_to_mec(mec_id, body=None):  # noqa: E501
         print("MEC ID NOT EXISTS", flush=True)
         return jsonify({'message':"MEC ID NOT EXISTS"}), 404
 
-    if connexion.request.mimetype == "application/json":
+    #if connexion.request.mimetype == "application/json":
         #body = NBService.from_dict(body)  # noqa: E501z
         #body_json = connexion.request.get_json()
-        print(body)
+    #    print(body)
 
     return add_new_nbservice( mec_id, body['service_name'], body['host'], body['port'], body['description'], body['props'])
 
