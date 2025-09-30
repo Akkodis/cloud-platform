@@ -633,7 +633,7 @@ spec:
           - microprofile-jwt
       - id: d325cde6-22fb-47d9-bac0-3d924d2dca24
         clientId: {{ .Values.global.oauth2.apisix.client }}
-        clientSecret: {{ .Values.global.oauth2.apisix.secret }}
+        secret: {{ .Values.global.oauth2.apisix.secret }}
         name: ''
         description: ''
         rootUrl: https://{{ .Values.global.cloudplatform.hostname }}
@@ -643,7 +643,6 @@ spec:
         enabled: true
         alwaysDisplayInConsole: false
         clientAuthenticatorType: client-secret
-        secret: '**********'
         redirectUris:
           - https://{{ .Values.global.cloudplatform.hostname }}/*
         webOrigins: []

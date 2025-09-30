@@ -152,6 +152,11 @@ cloudnative-pg:
   crds:
     create: false
 
+# Kafka UI
+kafka-ui:
+  fullnameOverride: "kafka-ui"
+  existingConfigMap: "kafka-ui-configmap"
+
 # 5GMETA Cloud Platform API Server
 apiserver-chart:
   fullnameOverride: apiserver
