@@ -45,6 +45,10 @@ apisix:
           paths:
             - "/"
       className: "nginx"
+      tls:
+        secretName: apisix-clould-platform-tls
+        hosts:
+          - *globalhostname
       pathType: Prefix
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
