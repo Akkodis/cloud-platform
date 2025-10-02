@@ -164,3 +164,6 @@ kafka-ui:
 # 5GMETA Cloud Platform API Server
 apiserver-chart:
   fullnameOverride: apiserver
+
+dashboard-chart:
+  fullnameOverride: dashboard
