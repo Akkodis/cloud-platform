@@ -1,0 +1,15 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: User
+metadata:
+  name: {{ .Values.global.mariadb.username }}
+  labels:
+    app.kubernetes.io/managed-by: Helm
+spec:
+  name: {{ .Values.global.mariadb.username }}
+  mariaDbRef:
+    name: {{ .Values.global.mariadb.mariadbref }}
+  passwordSecretKeyRef:
+    name: mariadb
+    key: password
+  maxUserConnections: 20
+  host: "%"

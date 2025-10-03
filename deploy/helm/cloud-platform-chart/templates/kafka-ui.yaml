@@ -1,16 +1,18 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kafa-ui-configmap
+  name: kafka-ui-configmap
+  labels:
+    app.kubernetes.io/managed-by: Helm
 data:
   SERVER_SERVLET_CONTEXT_PATH: "/kafka-ui/"
   KAFKA_CLUSTERS_0_NAME: {{ .Values.global.kafka.clustername }}
   KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: cloud-platform-cp-kafka.{{ .Release.Namespace }}.svc.cluster.local:9092
-  KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://cloud-platform-cp-schema-registry.{{ .Release.Namepsapce }}.svc.cluster.local:8081
+  KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://cloud-platform-cp-schema-registry.{{ .Release.Namespace }}.svc.cluster.local:8081
   KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: kafka-connect
   KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://cloud-platform-cp-kafka-connect.{{ .Release.Namespace }}.svc.cluster.local:8083
   KAFKA_CLUSTERS_0_KSQLDBSERVER: http://cloud-platform-cp-ksql-server.{{ .Release.Namespace }}.svc.cluster.local:8088
   AUTH_TYPE: "LOGIN_FORM"
-  SPRING_SECURITY_USER_NAME: admin
-  SPRING_SECURITY_USER_PASSWORD: admin-2024-2025.
+  SPRING_SECURITY_USER_NAME:  {{ .Values.global.kafkaui.username }}
+  SPRING_SECURITY_USER_PASSWORD: {{ .Values.global.kafkaui.password }}
 

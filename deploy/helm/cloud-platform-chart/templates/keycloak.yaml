@@ -2,6 +2,8 @@ apiVersion: k8s.keycloak.org/v2alpha1
 kind: Keycloak
 metadata:
   name: keycloak
+  labels:
+    app.kubernetes.io/managed-by: Helm
 spec:
   instances: 1
   db:

@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: ferretdb-service
   namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: Helm
 spec:
   selector:
     app: ferretdb

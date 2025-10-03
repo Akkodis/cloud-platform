@@ -1,0 +1,16 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Grant
+metadata:
+  name: mariadb-cloudplatfrom-user-grant
+  labels:
+     app.kubernetes.io/managed-by: Helm
+spec:
+  mariaDbRef:
+    name: {{ .Values.global.mariadb.mariadbref }}
+  privileges:
+    - {{ .Values.global.mariadb.privileges }}
+  database: "*"
+  table: "*"
+  username: {{ .Values.global.mariadb.username }}
+  grantOption: true
+  host: "%"

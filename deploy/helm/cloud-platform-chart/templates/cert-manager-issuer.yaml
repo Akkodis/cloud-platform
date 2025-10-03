@@ -12,7 +12,7 @@ spec:
  {{- else if eq .Values.global.tls.issuer "letsencrypt-staging" }}
  acme:
    server: https://acme-staging-v02.api.letsencrypt.org/directory
-   email: 5gmeta@akkodis.eu
+   email: {{ .Values.global.cloudplatform.email }}
    privateKeySecretRef:
      name: {{ .Values.global.tls.issuer }}
    solvers:
@@ -22,11 +22,11 @@ spec:
  {{- else if eq .Values.global.tls.issuer "letsencrypt-prod" }}
  acme:
    server: https://acme-v02.api.letsencrypt.org/directory
-   email: 5gmeta@akkodis.eu
+   email: {{ .Values.global.cloudplatform.email }}
    privateKeySecretRef:
      name: {{ .Values.global.tls.issuer }}
    solvers:
      - http01:
          ingress:
            class: nginx
- {{ end }}
+ {{- end }}

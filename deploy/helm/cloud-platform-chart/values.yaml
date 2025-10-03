@@ -8,6 +8,16 @@ global:
       username: &globalusername "5gmeta-platform"
       password: &globalpassword "5gmeta-platform"
       dbrootpassword: &globaldbrootpassword "5gmeta-platform"
+      email: "admin@5gmeta-platform.eu"
+    
+   mariadb:
+     mariadbref: mariadb-cluster
+     privileges: "ALL PRIVILEGES" 
+     username: "5gmeta-platform"
+     password: "5gmeta-platform"
+     databases:
+       - "dataflowdb"
+       - "discoverydb"
 
    broker:
      username: "5gmeta-platform"
@@ -15,6 +25,7 @@ global:
 
    keycloak:
      postgresql:
+        replicas: 1
         username: "5gmeta-platform"
         password: "5gmeta-platform"
 
@@ -22,6 +33,16 @@ global:
      username: "5gmeta-platform"
      password: "5gmeta-platform"
      database: "license-database"
+     imagetag: 2.5.0
+     postgresqlimagetag: 17-0.106.0-ferretdb-2.5.0
+     replicas: 1
+
+   kafka:
+     clustername: cloud-platform
+
+   kafkaui:
+     username: "admin"
+     password: "5gmeta-platform"
 
    oauth2:
      issuer: &oauthissuer "5gmeta-platform.eu/identity"
@@ -46,9 +67,9 @@ apisix:
             - "/"
       className: "nginx"
       tls:
-        secretName: apisix-clould-platform-tls
-        hosts:
+        - hosts:
           - *globalhostname
+          secretName: apisix-clould-platform-tls
       pathType: Prefix
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -114,42 +135,6 @@ mariadb-cluster:
     image: mariadb:lts-ubi9
     storage:
       size: 10Gi
-
-  databases:
-    - name: dataflowdb
-      characterSet: utf8
-      collate: utf8_general_ci
-      cleanupPolicy: Delete
-      requeueInterval: 10h
-
-    - name: discoverydb
-      characterSet: utf8
-      collate: utf8_general_ci
-      cleanupPolicy: Delete
-      requeueInterval: 10h
-
-  users:
-    - name: *globalusername
-      passwordSecretKeyRef:
-        name: mariadb
-        key: password
-      host: "%"
-      cleanupPolicy: Delete
-      requeueInterval: 10h
-      retryInterval: 30s
-
-  grants:
-    - name: *globalusername
-      privileges:
-        - "ALL PRIVILEGES"
-      database: "*"
-      table: "*"
-      username: *globalusername
-      grantOption: true
-      host: "%"
-      cleanupPolicy: Delete
-      requeueInterval: 10h
-      retryInterval: 30s
 
 cloudnative-pg:
   fullnameOverride: "cloudnative-pg"

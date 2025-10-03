@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: ferretdb
   namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
   selector:
@@ -15,7 +17,7 @@ spec:
     spec:
       containers:
         - name: ferretdb
-          image: ghcr.io/ferretdb/ferretdb:2.1.0
+          image: ghcr.io/ferretdb/ferretdb:{{ .Values.global.ferretdb.imagetag }}
           ports:
             - containerPort: 27017
           env:

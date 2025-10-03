@@ -6,10 +6,10 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: Helm
 spec:
-    args: ["sleep 120"]
+    args: [ 'sleep 260' ]
     mariaDbRef:
-      name: mariadb-cluster
-    username: {{ .Values.global.cloudplatform.username }}
+      name: {{ .Values.global.mariadb.mariadbref }}
+    username: {{ .Values.global.mariadb.username }}
     passwordSecretKeyRef:
       name: mariadb
       key: password
