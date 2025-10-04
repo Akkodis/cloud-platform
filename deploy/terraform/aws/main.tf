@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
   }
 }
@@ -49,28 +49,25 @@ module "vpc" {
 }
 
 
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.31"
+  version = "~> 21.3.1"
 
-  cluster_name    = "5gmetacloudplatform"
-  cluster_version = "1.31"
+  name    = "5gmetacloudplatform"
+  kubernetes_version = "1.33"
 
 
-  cluster_endpoint_public_access           = true
+  endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
-  eks_managed_node_group_defaults = {
-    instance_types = ["t3a.large"]
-  }
-
   eks_managed_node_groups = {
+
     managed-ng-1 = {
       name           = "managed-ng-1"
-      ami_type       = "AL2_x86_64"
       instance_types = ["t3a.large"]
       min_size       = 2
       desired_size   = 2
@@ -83,7 +80,7 @@ module "eks" {
 
 module "eks_blueprints_addons" {
   source            = "aws-ia/eks-blueprints-addons/aws"
-  version           = "1.19.0"
+  version           = "1.22.0"
   cluster_name      = module.eks.cluster_name
   cluster_endpoint  = module.eks.cluster_endpoint
   cluster_version   = module.eks.cluster_version
@@ -105,13 +102,4 @@ module "eks_blueprints_addons" {
   }
 
   enable_cluster_autoscaler           = true
-  enable_ingress_nginx                = true
-
-  ingress_nginx = {
-    name          = "ingress-nginx"
-    chart_version = "4.12.0"
-    repository    = "https://kubernetes.github.io/ingress-nginx"
-    namespace     = "ingress-nginx"
-    values        = [templatefile("${path.module}/values.yaml", {})]
-  }
 }
