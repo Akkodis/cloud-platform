@@ -1,7 +1,4 @@
 dependencies:
-- name: cert-manager
-  repository: https://charts.jetstack.io
-  version: v1.18.2
 - name: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
   version: 77.5.0
@@ -14,14 +11,11 @@ dependencies:
 - name: apisix
   repository: https://charts.apiseven.com
   version: 2.11.6
-- name: community-operator
-  repository: https://mongodb.github.io/helm-charts
-  version: 0.13.0
 - name: cloudnative-pg
   repository: https://cloudnative-pg.github.io/charts
   version: 0.26.0
-- name: cluster
-  repository: https://cloudnative-pg.github.io/charts
-  version: 0.3.0
-digest: sha256:505f31d16726ddc6e963c21420c2d7bce28bcf278bb0d6c8d54db0f059c797e2
-generated: "2025-09-25T17:42:23.394663897+02:00"
+- name: kafka-ui
+  repository: https://kafbat.github.io/helm-charts
+  version: 1.5.2
+digest: sha256:12e173730858d008d3cf051833b2a82ffa7558d414b1e886f4898c1a69e7f75b
+generated: "2025-10-04T10:10:19.338055775+02:00"
