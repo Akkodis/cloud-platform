@@ -101,6 +101,8 @@ apisix:
 
 kube-prometheus-stack:
   fullnameOverride: kube-prometheus
+  prometheus-node-exporter:
+    fullnameOverride: prometheus-node-exporter
   grafana:
     fullnameOverride: grafana
     adminUser: admin
@@ -152,3 +154,6 @@ apiserver-chart:
 
 dashboard-chart:
   fullnameOverride: dashboard
+
+figegmeta-kafka-chart:
+  fullnameOverride: ""
