@@ -87,8 +87,8 @@ apisix:
 
     extraVolumeMounts:
       - name: routes
-        mountPath: /apisix-config/apisix.yaml
-        #subPath: apisix.yaml
+        mountPath: /usr/local/apisix/conf/apisix.yaml
+        subPath: apisix.yaml
 
     apisix: 
       deployment:
