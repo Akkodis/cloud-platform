@@ -81,18 +81,11 @@ apisix:
         cert-manager.io/issuer: *globalissuer
 
     extraVolumes:
-      - name: config-apisix-yaml
-        emptyDir:
-          sizeLimit: 500Mi
-
       - name: routes
         configMap:
           name: apisix-routes
 
     extraVolumeMounts:
-      - name: config-apisix-yaml
-        mountPath: /apisix-config/
-
       - name: routes
         mountPath: /apisix-config/apisix.yaml
         #subPath: apisix.yaml
