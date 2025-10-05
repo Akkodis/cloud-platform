@@ -13,7 +13,7 @@ spec:
     helm:
       valueFiles:
          - values.yaml
-   syncPolicy:
+  syncPolicy:
     syncOptions:
       - CreateNamespace=true
     automated:
