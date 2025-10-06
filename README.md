@@ -121,7 +121,7 @@ git clone git@github.com:Akkodis/cloud-platform.git
 cd cloud-platform
 
 # Install other components
-helm dependency build deploy/helm/cloud-platform-chart
+helm dependency update deploy/helm/cloud-platform-chart
 helm install cloud-platform deploy/helm/cloud-platform-chart -n cloud-platform --create-namespace
 ```
 
@@ -143,6 +143,18 @@ Cloud Platform Architecture
 </p>
 
 For more details on using EKS refers at this document: [Deployment details on EKS](./docs/deployment-options/eks.md).
+
+# Uninstalling the Cloud Platform
+
+## Manuallly
+
+To uninstall th Cloud Platform, type the following command:
+
+```bash
+helm -n cloud-platform uninstall cloud-platform
+kubectl -n cloud-platform delete all --all
+kubectl delete ns cloud-platform
+```
 
 # Credits
 
