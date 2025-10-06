@@ -154,6 +154,8 @@ apiserver-chart:
 
 dashboard-chart:
   fullnameOverride: dashboard
+  image:
+    tag: dev
 
 figegmeta-kafka-chart:
   fullnameOverride: ""
