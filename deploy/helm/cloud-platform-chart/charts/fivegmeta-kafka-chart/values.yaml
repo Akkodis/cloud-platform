@@ -7,7 +7,7 @@ cp-zookeeper:
   # This is to override the chart name.
   servers: 3
   image: confluentinc/cp-zookeeper
-  imageTag: 7.9.3-1-ubi8
+  imageTag: 7.7.6
   ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   imagePullSecrets:
@@ -47,7 +47,7 @@ cp-kafka:
   # This is to override the chart name.
   brokers: 3
   image: confluentinc/cp-enterprise-kafka
-  imageTag: 7.9.3-1-ubi8
+  imageTag: 7.7.6
   ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   imagePullSecrets:
@@ -77,7 +77,7 @@ cp-schema-registry:
   enabled: true
   # This is to override the chart name.
   image: confluentinc/cp-schema-registry
-  imageTag: 7.9.3-1-ubi8
+  imageTag: 7.7.6
   ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   imagePullSecrets:
@@ -103,7 +103,7 @@ cp-kafka-rest:
   enabled: true
   # This is to override the chart name.
   image: confluentinc/cp-kafka-rest
-  imageTag: 7.9.3-1-ubi8
+  imageTag: 7.7.6
   ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   imagePullSecrets:
@@ -126,7 +126,7 @@ cp-kafka-connect:
   enabled: true
   # This is to override the chart name.
   image: confluentinc/cp-kafka-connect
-  imageTag: 7.9.3-1-ubi8
+  imageTag: 7.7.6
   #image: 5gmeta/kafka-connect
   #imageTag: 6.1.0
   ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
@@ -151,7 +151,7 @@ cp-ksql-server:
   enabled: true
   # This is to override the chart name.
   image: confluentinc/cp-ksqldb-server
-  imageTag: 7.9.3-1-ubi8
+  imageTag: 7.7.6
   ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   imagePullSecrets:
