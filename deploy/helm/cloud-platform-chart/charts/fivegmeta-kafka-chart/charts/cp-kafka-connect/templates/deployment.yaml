@@ -124,10 +124,6 @@ spec:
             - /bin/bash
             - -c
             - |
-              #if [ -f /opt/stream-reactor-8.1.26/activemq-client-6.1.5.jar ]; then
-              #   mv /opt/stream-reactor-8.1.26/activemq-client-6.1.5.jar $JAVA_HOME/lib/
-              #fi
-
               /etc/confluent/docker/run &
               $CUSTOM_SCRIPT_PATH
               sleep infinity
