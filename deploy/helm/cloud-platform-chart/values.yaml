@@ -15,6 +15,7 @@ global:
      privileges: "ALL PRIVILEGES" 
      username: "5gmeta-platform"
      password: "5gmeta-platform"
+     rootpassword: "5gmeta-platform"
      databases:
        - "dataflowdb"
        - "discoverydb"
@@ -30,9 +31,9 @@ global:
         password: "5gmeta-platform"
 
    ferretdb:
-     username: "5gmeta-platform"
-     password: "5gmeta-platform"
-     database: "license-database"
+     username: "postgres"
+     password: "changeme"
+     database: "postgres"
      imagetag: 2.5.0
      postgresqlimagetag: 17-0.106.0-ferretdb-2.5.0
      replicas: 1
@@ -135,6 +136,9 @@ mariadb-cluster:
       key: root-password
       generate: true
     image: mariadb:lts-ubi9
+    service:
+      type: NodePort
+
     storage:
       size: 10Gi
 
