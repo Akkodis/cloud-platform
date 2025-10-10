@@ -17,14 +17,12 @@ import json
 from types import SimpleNamespace
 
 config = {
-  'user': 'root',
+  'user': os.environ['DB_USER'],
   'password': os.environ["DB_PASSWORD"],
   'host': os.environ["DB_HOST"],
   'database': os.environ["DISCOVERY_DB_NAME"],
   'raise_on_warnings': True
 }
-
-
 
 
 include_nulls = False
