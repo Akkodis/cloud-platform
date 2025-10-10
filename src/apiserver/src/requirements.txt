@@ -8,8 +8,8 @@ pymysql
 sqlalchemy
 sqlalchemy-utils
 Flask-MySQL
-ksql
 cryptography
 mysql-connector-python
 pymongo
 orjson
+ksqldb
