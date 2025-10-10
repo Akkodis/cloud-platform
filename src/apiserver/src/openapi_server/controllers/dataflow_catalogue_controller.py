@@ -1,7 +1,5 @@
 import connexion
-import six
 import sqlalchemy as db
-import json
 import os
 
 from openapi_server.models.data_flow import DataFlow  # noqa: E501
@@ -22,7 +20,7 @@ dataflows = db.Table('dataflows', metadata, autoload_with=engine)
 def change_inserted_number(dataflow_id, value: int):
     connection_local = engine.connect()
 
-    query = db.select([dataflows.columns.counter]).where([dataflows.columns.dataflowId] == dataflow_id)
+    query = db.select(dataflows.columns.counter).where(dataflows.columns.dataflowId == dataflow_id)
     c = connection_local.execute(query).fetchone()["counter"] + value
 
     query = db.update(dataflows).values({"counter": c}).where([dataflows.columns.dataflowId] == dataflow_id)
@@ -65,7 +63,7 @@ def get_data_flows(data_type, data_sub_type=None, data_format=None, country=None
     """
     connection_local = engine.connect()
 
-    query = db.select([dataflows.columns.dataflowId]).where(dataflows.columns.dataType == data_type)
+    query = db.select(dataflows.columns.dataflowId).where(dataflows.columns.dataType == data_type)
     if(data_sub_type):
         query = query.where(dataflows.columns.dataSubType == data_sub_type)
     if(data_format):
@@ -88,7 +86,7 @@ def get_data_flows(data_type, data_sub_type=None, data_format=None, country=None
         pieces = key.split(",")
         print(db.func.json_extract(dataflows.columns.extraAttributes, '$.'+key))
         if len(pieces) == 1:
-            if(value.isnumeric()):
+            if value.isnumeric():
                 query = query.where(db.func.json_extract(dataflows.columns.extraAttributes, '$.'+key) == int(value))
             else:
                 query = query.where(db.func.json_extract(dataflows.columns.extraAttributes, '$.'+key) == value)   
@@ -100,7 +98,7 @@ def get_data_flows(data_type, data_sub_type=None, data_format=None, country=None
                 query = query.where(db.func.json_extract(dataflows.columns.extraAttributes, '$.'+key) >= int(value))
 
     result = connection_local.execute(query).fetchall()
-    if (result is None):
+    if not result:
         return {
             "dataflows": []
         }
@@ -152,7 +150,7 @@ def get_metadata(data_flow_id):  # noqa: E501
     """
     connection_local = engine.connect()
 
-    query = db.select(dataflows).where([dataflows.columns.dataflowId] == data_flow_id)
+    query = db.select(dataflows).where(dataflows.columns.dataflowId == data_flow_id)
     result = connection_local.execute(query).fetchone()
     if result is None:
         return {
@@ -172,9 +170,9 @@ def get_datatypes(quadkey):
     query = db.select(dataflows.columns.dataType).distinct().where(dataflows.columns.locationQuadkey.startswith(quadkey))
     result = connection_local.execute(query).fetchall()
 
-    if result is None:
+    if not result:
         return []
-    
+
     l = []
     for t in result:
         l.append(t["dataType"])
