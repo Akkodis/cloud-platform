@@ -68,7 +68,7 @@ The following requirements must be met to deploy in production:
 - A FQDN for the Cloud and MEC Platforms.
 - TLS certificates for MEC and Cloud services. These can be obtained by using cert-manager.
 - A SMTP server.
-- A Nginx Ingress controller and Load Balancer. Services such Apache Kafka can be configure behind a Load Balancer. This step is dependant on each Cloud Provider and requires the adaptation of the Helm Charts.
+- A Ingress-Nginx  controller and Load Balancer. Services such Apache Kafka can be configure behind a Load Balancer. This step is dependant on each Cloud Provider and requires the adaptation of the Helm Charts.
 - Configuration on the Cloud Service Provider of the Network Security Group to open the ports mentionned in the document.
 
 #### GitOps using ArgoCD
@@ -80,11 +80,20 @@ For deploying in production, the Helm values must be changed using ArgoCD UI.
 
 #### Manual deployment of the Cloud Platform
 
+##### Install Ingress-Nginx  Controller
+
+Before installing the Cloud Platform, Ingress-Nginx  controller must be installed. If the controller is not installed on the Kubernetes cluster, install it as follows:
+
+```bash
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+```
 
 ##### Install Cert-manager 
 
 
-Before installing the Cloud Platform, cert-manager must be installed as follows:
+Before installing the Cloud Platform, cert-manager must be installed. If cert-manager is not installed on the Kubernetes cluster, install it as follows:
 
 ```bash
 helm install \
@@ -127,9 +136,29 @@ helm install cloud-platform deploy/helm/cloud-platform-chart -n cloud-platform -
 
 #### Cloud Platform Post-install configuration
 
+##### Apisix
 After a successful installation:
 
 -  The Apisix Pod will crash. Please edit the apisix deployment and change the command in the Pod form command: ["sh", "-c","ln -s /apisix-config/apisix.yaml /usr/local/apisix/conf/apisix.yaml && /docker-entrypoint.sh docker-start"] to command: ["sh", "-c","/docker-entrypoint.sh docker-start"]
+
+
+#### Keyclaok
+
+After editing the Apisix deployment, type the following command to get the Keyclaok temporary admin username and passwords:
+
+```
+kubectl -n cloud-platform get secrets keycloak-initial-admin -o jsonpath='{.data.username}' | base64 -d
+kubectl -n cloud-platform get secrets keycloak-initial-admin -o jsonpath='{.data.password}' | base64 -d
+```
+
+Log in to Keycloak's admin console to create:
+1. A permanent admin user
+2. Add users to the 5GMETA realm.
+3. Make any necessary configuration to Keycloak.
+
+##### MariaDB
+
+Ensure that the databases have been automatically created and initialised.
 
 
 ## Cloud Platform on EKS <a name="cloud-platform-eks"></a>
