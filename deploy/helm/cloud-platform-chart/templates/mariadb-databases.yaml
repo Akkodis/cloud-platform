@@ -1,3 +1,4 @@
+---
 {{- range  $database := .Values.global.mariadb.databases }}
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Database
@@ -11,4 +12,5 @@ spec:
     name: {{ $.Values.global.mariadb.mariadbref }}
   characterSet: utf8
   collate: utf8_general_ci
+---
 {{- end }}
