@@ -1,11 +1,6 @@
 import requests
 import json
 import sys
-#import connexion
-#import six
-
-#from openapi_server.models.instance_type import InstanceType  # noqa: E501
-#from openapi_server import util
 
 
 def post_type(payload, mec_id):  # noqa: E501
@@ -35,11 +30,12 @@ def post_type(payload, mec_id):  # noqa: E501
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/types'
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1/types'
         headers = {"accept": "application/json", "Content-Type": "application/json"}
-        response = requests.post(url, data=json.dumps(payload), headers=headers)
+        response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
         json_response = json.loads(response.content)
-    except:
+    except Exception as e:
+        print(e)
         return "Failed to establish connection with Edge Instance API", 505
 
     return json_response
@@ -70,7 +66,7 @@ def get_types(mec_id):  # noqa: E501
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/types'
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1' + '/types'
         headers = {"accept": "application/json"}
         response = requests.get(url, headers=headers, verify=False)
         json_response = json.loads(response.content)
@@ -106,7 +102,7 @@ def get_type(mec_id, type_id):  # noqa: E501
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/types/' + str(type_id)
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1' + '/types/' + str(type_id)
         headers = {"accept": "application/json"}
         response = requests.get(url, headers=headers)
         json_response = json.loads(response.content ,)
@@ -144,7 +140,7 @@ def patch_type(payload, mec_id, type_id):  # noqa: E501
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/types/' + str(type_id)
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1' + '/types/' + str(type_id)
         headers = {"accept": "application/json", "Content-Type": "application/json"}
         response = requests.patch(url, data=json.dumps(payload), headers=headers)
         json_response = json.loads(response.content)
@@ -181,7 +177,7 @@ def delete_type(mec_id, type_id):  # noqa: E501
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/types/' + str(type_id)
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1' + '/types/' + str(type_id)
         headers = {"accept": "application/json"}
         response = requests.delete(url, headers=headers)
         json_response = json.loads(response.content)
@@ -215,10 +211,11 @@ def get_instances(mec_id):  # noqa: E501
 
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
+    print(edgeinstance_host)
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/instances'
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1' + '/instances'
         headers = {"accept": "application/json"}
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, verify=False)
         json_response = json.loads(response.content)
     except:
         return "Failed to establish connection with Edge Instance API", 505
@@ -255,11 +252,12 @@ def post_instance(payload, mec_id):  # noqa: E501
     edgeinstance_port = json_response[service_index]["port"]
     try:
 
-        url = 'https://' + edgeinstance_ip + '/edgeinstance-api/' + '/instances'
+        url = 'https://' + edgeinstance_host + '/api/v1/instances'
         headers = {"accept": "application/json", "Content-Type": "application/json"}
-        response = requests.post(url, data=json.dumps(payload), headers=headers)
+        response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
         json_response = json.loads(response.content)
-    except:
+    except Exception as e:
+        print(e)
         return "Failed to establish connection with Edge Instance API", 505
 
     return json_response
@@ -292,7 +290,7 @@ def get_instance(mec_id, instance_id):  # noqa: E501
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/instances'
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1' + '/instances'
         headers = {"accept": "application/json"}
         response = requests.get(url, headers=headers)
         json_response = json.loads(response.content)
@@ -328,7 +326,7 @@ def delete_instance(mec_id, instance_id):  # noqa: E501
     edgeinstance_host = json_response[service_index]["host"]
     edgeinstance_port = json_response[service_index]["port"]
     try:
-        url = 'https://' + edgeinstance_host + ':' + egdeinstance_port +  '/api/v1' + '/instances'
+        url = 'https://' + edgeinstance_host + ':' + str(edgeinstance_port) +  '/api/v1' + '/instances'
         headers = {"accept": "application/json"}
         response = requests.delete(url, headers=headers)
         json_response = json.loads(response.content)
