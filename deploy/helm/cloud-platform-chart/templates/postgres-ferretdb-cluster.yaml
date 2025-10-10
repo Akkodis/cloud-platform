@@ -10,16 +10,15 @@ spec:
   imageName: ghcr.io/ferretdb/postgres-documentdb:{{ .Values.global.ferretdb.postgresqlimagetag }}
   postgresUID: 999
   postgresGID: 999
+  superuserSecret: 
+    name: ferretdb 
   enableSuperuserAccess: true
 
   bootstrap:
     initdb:
       postInitSQL:
         - 'CREATE EXTENSION IF NOT EXISTS documentdb CASCADE;'
-      database: {{ .Values.global.ferretdb.database }}
-      owner: {{ .Values.global.ferretdb.username }}
-      secret:
-        name: ferretdb
+
 
   storage:
     size: 2Gi
