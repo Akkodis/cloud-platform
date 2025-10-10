@@ -1,6 +1,6 @@
-FROM python:3.9
+FROM python:3.13
 
-RUN apt-get update && apt-get install -y curl jq bc python3-pip
+RUN apt-get update && apt-get install -y python3-pip
 
 COPY requirements.txt .
 
