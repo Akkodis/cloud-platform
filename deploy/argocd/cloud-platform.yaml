@@ -18,7 +18,5 @@ spec:
       - CreateNamespace=true
     automated:
       prune: true
-      selfHeal: true
-      allowEmpty: true
   sources: []
   project: 'default'
