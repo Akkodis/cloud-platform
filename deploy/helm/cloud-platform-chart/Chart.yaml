@@ -15,7 +15,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.0
+version: 0.2.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
@@ -30,25 +30,25 @@ dependencies:
 
 - name: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
-  version: 80.8.2
+  version: 84.5.0
     
 - name: mariadb-operator
   repository: https://helm.mariadb.com/mariadb-operator
-  version: 25.10.3
+  version: 26.3.0
 
 - name: mariadb-cluster
   repository: https://helm.mariadb.com/mariadb-operator
-  version: 25.10.3
+  version: 26.3.0
 
 - name: apisix
   repository: https://charts.apiseven.com
-  version: 2.12.5
+  version: 2.14.0
 
 
 - name: cloudnative-pg
   repository: https://cloudnative-pg.github.io/charts
-  version: 0.27.0
+  version: 0.28.0
 
 - name: kafka-ui
   repository: https://kafbat.github.io/helm-charts
-  version: 1.5.3
+  version: 1.6.4
